@@ -30,18 +30,8 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    background: '#ffffff',
+    borderBottom: '1px solid #e0e0e0',
   },
   drawer: {
     width: drawerWidth,
@@ -106,13 +96,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function Header() {
+export default function Header(props) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
   const classes = useStyles();
   const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn)
-  
-  const [open, setOpen] = React.useState(false);
+
+  const { open, setOpen } = props
 
   const loginButton = (
     <Button className={classes.loginButton} style={matches ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
@@ -130,44 +120,38 @@ export default function Header() {
     <Box className={classes.root}>
       <CssBaseline />
       <AppBar
-        position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
         })}
+        position="static"
         color="inherit"
         elevation={0}
       >
         <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={() => setOpen(true)}
-          edge="start"
-          className={clsx(classes.menuButton, {
-          })}
-        >
-          <MenuIcon />
-        </IconButton>
-          <a href="/" style={{marginTop: 5, marginLeft: 5}} className={classes.link} >
-            <img src={imgLogo} alt="SUMAI" className={classes.imgLogo} /> 
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={() => setOpen(!open)}
+            edge="start"
+            className={clsx(classes.menuButton, {
+            })}
+          >
+            <MenuIcon />
+          </IconButton>
+          <a href="/" style={{ marginTop: 5, marginLeft: 5 }} className={classes.link} >
+            <img src={imgLogo} alt="SUMAI" className={classes.imgLogo} />
 
-            <Typography className={classes.summaryTypo} style={{fontSize: "28px", marginLeft: "10px"}}>
+            <Typography className={classes.summaryTypo} style={{ fontSize: "28px", marginLeft: "10px" }}>
               뉴스 요약
             </Typography>
           </a>
 
-          <div style={{flexGrow: 1}}/>
+          <div style={{ flexGrow: 1 }} />
 
           {isLoggedIn ? loginLayout : loginButton}
 
         </Toolbar>
       </AppBar>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-      </main>
       {/* <FeedbackDialog open={this.state.dialogOpen} setOpen={this.dialogOpen} classes={classes} matches={this.props.matches}/>         */}
-
-      <MiniDrawer open={open} setOpen={setOpen}/>
 
     </Box>
   )

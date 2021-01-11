@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
   },
   drawerOpen: {
+    overflowX: 'hidden',
     border: '0px',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
@@ -252,7 +253,6 @@ export default function MiniDrawer(props) {
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
-        <Divider />
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem button key={text}>

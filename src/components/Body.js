@@ -21,7 +21,7 @@ import * as root from '../rootValue';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
 import Tooltip from '@material-ui/core/Tooltip';
 
-const useStyles = theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     '& > *': {
@@ -100,7 +100,7 @@ const useStyles = theme => ({
     bottom: theme.spacing(3),
     zIndex: "1",
   },
-});
+}));
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -124,60 +124,11 @@ function BootstrapTooltip(props) {
   return <Tooltip arrow classes={classes} {...props} />;
 }
 
-class Body extends React.Component {
-
-    constructor(props) {
-      super(props)
-
-      this.state = {
-        fabTag: false,
-      }
-    }
-
-    render() {
-        const { classes } = this.props;
-
-        return (
-          <Box style={{color: "#000", padding: "75px 0px"}}>
-            <Box display="flex" justifyContent="center">
-              <Box style={{width: "640px", marginRight: "5px"}} >
-                <Card elevation={3} >
-                  <CardHeader title="문장 입력" className={classes.cardTitleText} />
-                  <CardContent >
-                      <Box display="flex">
-                        <TextareaAutosize className={classes.textInput} maxLength="5000" 
-                          autoFocus={true} spellCheck="false" onChange={this.handleChange} />
-                      </Box>
-                  </CardContent>
-                  <CardActions className={classes.summaryButtonLayout}>
-                      <Button onClick={this.fetchUsers} className={classes.summaryButton}>
-                          요약하기
-                      </Button>
-                  </CardActions>
-                </Card >
-              </Box >
-
-              <Box style={{width: "640px", marginLeft: "5px"}} >
-                <Card elevation={3} > 
-                    <CardHeader title="요약" className={classes.cardTitleText} />
-                    <CardContent >
-                    </CardContent>
-                </Card >
-              </Box >
-            </Box>
-
-            <Fab onClick={this.scrollTop} className={clsx(classes.fab, {[classes.displayNone]: !this.state.fabTag})} >
-              <ArrowUpwardIcon />
-            </Fab>
-            
-          </Box>
-          );
-    }
-
+export default function Body() {
+  const classes = useStyles();
+  return (
+    <Box style={{color: "#000", padding: "75px 0px"}}>
+      바디임
+    </Box>
+  )
 }
-
-Body.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(useStyles)(Body);

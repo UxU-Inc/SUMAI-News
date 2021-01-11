@@ -410,7 +410,6 @@ function MiniDrawer(props) {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Body/>
       </main>
     </div>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
@@ -6,8 +7,6 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
 import AccountIcon from '@material-ui/icons/AccountCircle';
-import MiniDrawer from './MiniDrawer';
-
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -22,7 +21,9 @@ import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
-const drawerWidth = 240;
+import Menu from './Menu'
+
+import * as root from '../../rootValue';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,41 +32,6 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     background: '#ffffff',
-    borderBottom: '1px solid #e0e0e0',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-  },
-  hide: {
-    display: 'none',
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
-  },
-  toolbarLeftIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
   },
   toolbar: {
     display: 'flex',
@@ -92,20 +58,28 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: "center",
     textDecoration: 'none',
-    minWidth: "142px",
+  },
+
+  loginButton: {
+    '&:hover': {
+      background: root.HoberColor
+    },
+    background: root.PrimaryColor,
+    color: "#fff",
   },
 }))
 
 export default function Header(props) {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('md'));
+  const xsm = useMediaQuery(theme.breakpoints.up('xsm'));
+  const md = useMediaQuery(theme.breakpoints.up('md'));
   const classes = useStyles();
-  const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn)
+  const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn);
 
   const { open, setOpen } = props
 
   const loginButton = (
-    <Button className={classes.loginButton} style={matches ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
+    <Button onClick={() => window.location.assign("https://sumai.co.kr/login")} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
       <AccountIcon style={{ marginRight: "5px", }} />
         로그인
     </Button>
@@ -128,7 +102,7 @@ export default function Header(props) {
       >
         <Toolbar>
           <IconButton
-            color="inherit"
+            color='#606060'
             aria-label="open drawer"
             onClick={() => setOpen(!open)}
             edge="start"
@@ -137,21 +111,23 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <a href="/" style={{ marginTop: 5, marginLeft: 5 }} className={classes.link} >
+          <a href="/" style={{ marginLeft: 5 }} className={classes.link} style={{minWidth: xsm ? "201px" : "142px"}}>
             <img src={imgLogo} alt="SUMAI" className={classes.imgLogo} />
 
             <Typography className={classes.summaryTypo} style={{ fontSize: "28px", marginLeft: "10px" }}>
-              뉴스 요약
+              {xsm ? "뉴스 요약" : "뉴스"}
             </Typography>
           </a>
 
           <div style={{ flexGrow: 1 }} />
 
+          <Menu/>
+
           {isLoggedIn ? loginLayout : loginButton}
 
         </Toolbar>
       </AppBar>
-      {/* <FeedbackDialog open={this.state.dialogOpen} setOpen={this.dialogOpen} classes={classes} matches={this.props.matches}/>         */}
+      {/* <FeedbackDialog open={this.state.dialogOpen} setOpen={this.dialogOpen} classes={classes} md={this.props.md}/>         */}
 
     </Box>
   )

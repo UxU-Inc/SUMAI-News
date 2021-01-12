@@ -1,10 +1,9 @@
 import React from 'react';
 
 import Header from "./Header/Header";
-import Body from "./Body";
+import Body from "./Body/Body";
 
 import Box from '@material-ui/core/Box';
-import clsx from 'clsx';
 import MiniDrawer from './Header/MiniDrawer';
 import { makeStyles } from '@material-ui/core/styles';
 

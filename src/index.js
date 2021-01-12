@@ -17,6 +17,14 @@ const theme = createMuiTheme({
     fontFamily: 'NotoSansKR-Medium',
   },
   breakpoints: {
+    keys: [
+      "xs",
+      "xsm",
+      "sm",
+      "md",
+      "lg",
+      "xl",
+    ],
     values: {
       xs: 0,
       xsm: 360,
@@ -37,6 +45,8 @@ const theme = createMuiTheme({
 });
 
 export const store = createStore(reducers, applyMiddleware(thunk));
+
+console.log(theme)
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>

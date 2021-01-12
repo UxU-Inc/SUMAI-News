@@ -53,7 +53,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
-import Body from "./Body"; 
+import Body from "./Body/Body"; 
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;

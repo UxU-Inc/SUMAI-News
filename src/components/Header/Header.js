@@ -21,6 +21,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import AccountManagementMenu from './AccountManagementMenu';
 
 const drawerWidth = 240;
 
@@ -113,6 +114,7 @@ export default function Header(props) {
   const loginLayout = (
     <Box display="flex" flexDirection="row" style={{ marginLeft: "auto", color: 'rgba(0, 0, 0, 0.87)' }}>
       <Box p={1}>
+          {AccountManagementMenu()}
       </Box>
     </Box>
   )

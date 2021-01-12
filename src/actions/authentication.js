@@ -1,6 +1,7 @@
 //액션생성자 함수와 thunk 를 정의하는 파일입니다.
 import axios from 'axios';
 import * as types from './ActionTypes';
+import {store} from '../index'
  
 /* SIGNUP */
 // export function signupRequest(email, name, password) {
@@ -103,17 +104,15 @@ export function loginFailure(error) {
     };
 }
 
-export function getStatusRequest() {
-    return (dispatch) => {
-        // inform Get Status API is starting
-        dispatch(getStatus());
-        return axios.get('/api/account/getinfo')
-        .then((response) => {
-            dispatch(getStatusSuccess(response.data.info.id, response.data.info.email, response.data.info.name)); //HTTP 통신을 통해 name 받아옴
-        }).catch((error) => {
-            dispatch(getStatusFailure());
-        });
-    };
+export async function getStatusRequest() {
+    // inform Get Status API is starting
+    store.dispatch(getStatus());
+    axios.get('http://www.sumai.co.kr:3306/api/account/getinfo', {withCredentials: true}) // withCredentials 쿠키를 교차 사이트 액세스
+    .then((response) => {
+        return store.dispatch(getStatusSuccess(response.data.info.id, response.data.info.email, response.data.info.name)); //HTTP 통신을 통해 name 받아옴
+    }).catch((error) => {
+        return store.dispatch(getStatusFailure());
+    });
 }
  
 export function getStatus() {
@@ -138,13 +137,11 @@ export function getStatusFailure() {
 }
 
 /* Logout */
-export function logoutRequest() {
-    return (dispatch) => {
-        return axios.post('/api/account/logout')
-        .then((response) => {
-            dispatch(logout());
-        });
-    };
+export async function logoutRequest() {
+    axios.post('/api/account/logout')
+    .then((response) => {
+        return store.dispatch(logout());
+    });
 }
  
 export function logout() {

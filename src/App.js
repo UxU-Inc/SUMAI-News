@@ -1,19 +1,17 @@
-import {useEffect} from 'react';
+import { useEffect, useCallback } from 'react';
 import Main from "./components/Main";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import { getStatusRequest, logoutRequest, getStatusFailure } from './actions/authentication';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
 
 
 function App() {
-  const theme = useTheme()
   const history = useHistory()
-  const state = useSelector(state => state)
-  const valid = useSelector(state => state.authentication.status.valid)
-  const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn)
+  const dispatch = useCallback(useDispatch(), [])
+  const isLoggedIn = useSelector(store => store.authentication.status.isLoggedIn)
   
 
   useEffect(() => { //컴포넌트 렌더링이 맨 처음 완료된 이후에 바로 세션확인
@@ -44,7 +42,7 @@ function App() {
     let loginData = getCookie('key');
     // if loginData is undefined, do nothing
     if (typeof loginData === "undefined") {
-      getStatusFailure()
+      dispatch(getStatusFailure())
       return
     };
 
@@ -53,7 +51,7 @@ function App() {
 
     // if not logged in, do nothing
     if (!loginData.isLoggedIn) {
-      getStatusFailure()
+      dispatch(getStatusFailure())
       return
     };
 
@@ -61,9 +59,8 @@ function App() {
     // check whether this cookie is valid or not
     getStatusRequest().then(
       (res) => {
-        console.log(state)
         // if session is not valid
-        if (!valid) {
+        if (res.type==="AUTH_GET_STATUS_FAILURE") {
           // logout the session
           loginData = {
             isLoggedIn: false,

@@ -18,6 +18,7 @@ import WhatshotIcon from '@material-ui/icons/Whatshot';
 import HistoryIcon from '@material-ui/icons/History';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import MailIcon from '@material-ui/icons/Mail';
+import FeedbackDialog from './FeedbackDialog';
 
 const drawerWidth = 240;
 
@@ -114,6 +115,8 @@ export default function MiniDrawer(props) {
 
   const {open, setOpen} = props
 
+  const [dialogOpen, setDialogOpen] = React.useState(false)
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -168,12 +171,13 @@ export default function MiniDrawer(props) {
         </List>
         <Divider />
         <List>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px'}}>
+          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px'}} onClick={() => setDialogOpen(true)}>
             <ListItemIcon> <MailIcon style={{fontSize: '30px'}}/> </ListItemIcon>
-            <ListItemText disableTypography primary="의견 보내기" className={classes.listText} />
+            <ListItemText disableTypography primary="의견 보내기" className={classes.listText}  />
           </ListItem>
         </List>
       </Drawer>
+      <FeedbackDialog open={dialogOpen} setOpen={setDialogOpen} />
     </Box>
   )
 }

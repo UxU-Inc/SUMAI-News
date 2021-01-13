@@ -15,7 +15,6 @@ import imgLogo from '../../images/sumai_logo_blue.png';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-// import FeedbackDialog from './FeedBackDialog';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
@@ -29,6 +28,7 @@ import * as root from '../../rootValue';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    height: '64px',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -81,7 +81,7 @@ export default function Header(props) {
   const { open, setOpen } = props
 
   const loginButton = (
-    <Button onClick={() => window.location.assign("https://sumai.co.kr/login")} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
+    <Button onClick={() => window.location.assign("https://sumai.co.kr/login?url="+window.location.href)} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
       <AccountIcon style={{ marginRight: "5px", }} />
         로그인
     </Button>
@@ -99,7 +99,7 @@ export default function Header(props) {
       <AppBar
         className={clsx(classes.appBar, {
         })}
-        position="static"
+        position="fixed"
         color="inherit"
         elevation={0}
       >
@@ -130,8 +130,6 @@ export default function Header(props) {
 
         </Toolbar>
       </AppBar>
-      {/* <FeedbackDialog open={this.state.dialogOpen} setOpen={this.dialogOpen} classes={classes} md={this.props.md}/>         */}
-
     </Box>
   )
 }

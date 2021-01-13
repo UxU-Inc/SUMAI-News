@@ -124,7 +124,7 @@ export default function Header(props) {
 
           <div style={{ flexGrow: 1 }} />
 
-          <Menu/>
+          {xsm ? <Menu/> : <div style={{marginLeft: '10px'}}/>}
 
           {isLoggedIn ? loginLayout : loginButton}
 

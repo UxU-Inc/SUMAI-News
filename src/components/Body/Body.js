@@ -28,13 +28,11 @@ function ColsCount() {
   const sm = useMediaQuery(theme.breakpoints.between(theme.breakpoints.values.xsm, 'sm'));  // 360~600
   const md = useMediaQuery(theme.breakpoints.between('sm', 'md'));  // 600~720
   const lg = useMediaQuery(theme.breakpoints.between('md', 'lg'));  // 720~1280
-  const xl = useMediaQuery(theme.breakpoints.between('lg', 'xl'));  // 1280~1920
   
   if(xsm)     return 1;
   else if(sm) return 2;
   else if(md) return 3;
-  else if(lg) return 4;
-  else if(xl) return 5;
+  else return 4;
 }
 
 

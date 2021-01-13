@@ -12,22 +12,29 @@ import { red } from '@material-ui/core/colors';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Box from '@material-ui/core/Box';
 
-// news agency logo
-import news_agency_logo from './news_agency'
+import NewsAgencyURL from './NewsAgency/NewsAgencyURL'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100%",
+    minWidth: '260px',
+    height: '100%',
   },
   CardHeader: {
     borderBottom: '1px solid #e0e0e0',
     color: '#0000008a',
-    padding: theme.spacing(1),
-    paddingLeft: theme.spacing(2),
+    padding: '8px 8px 8px 16px',
+  },
+  a: {
+    width: '80px',
+    height: '40px',
   },
   imgLogo: {
-    width: "80px",
-    objectFit: "scale-down",
+    width: '80px',
+    height: '40px',
+    objectFit: 'scale-down',
+    objectPosition: 'left',
+    cursor: 'pointer',
   },
   media: {
     height: 0,
@@ -38,6 +45,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+function news_agency_logo(news_agency) {
+  return '/images/news_agency/' + news_agency + '.png';
+}
+
+function onClickExternLink(news_agency) {
+  if(NewsAgencyURL(news_agency) != null) {
+    window.location.assign(NewsAgencyURL(news_agency))
+  }
+}
 
 
 export default function RecipeReviewCard(props) {
@@ -50,7 +67,9 @@ export default function RecipeReviewCard(props) {
         className={classes.CardHeader}
         title={
           <Box display="flex" alignItems="center" >
-            <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} />
+            <a href={NewsAgencyURL(news_agency)} className={classes.a}>
+              <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} />
+            </a>
             <div style={{ flexGrow: 1 }} />
             <IconButton style={{ padding: "5px" }} >
               <ThumbUpAltIcon style={{ fontSize: "30px" }} />
@@ -58,7 +77,7 @@ export default function RecipeReviewCard(props) {
           </Box>
         }
         subheader={
-          <Typography variant="h6" style={{ maxWidth: "95%", color: "#000" }}>
+          <Typography variant="h6" style={{ color: "#000" }}>
             {title}
           </Typography>
         }

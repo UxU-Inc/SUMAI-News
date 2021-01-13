@@ -107,7 +107,7 @@ export function loginFailure(error) {
 export async function getStatusRequest() {
     // inform Get Status API is starting
     store.dispatch(getStatus());
-    axios.get('http://www.sumai.co.kr:3306/api/account/getinfo', {withCredentials: true}) // withCredentials 쿠키를 교차 사이트 액세스
+    return axios.get('/api/account/getinfo')
     .then((response) => {
         return store.dispatch(getStatusSuccess(response.data.info.id, response.data.info.email, response.data.info.name)); //HTTP 통신을 통해 name 받아옴
     }).catch((error) => {

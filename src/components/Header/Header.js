@@ -80,7 +80,7 @@ export default function Header(props) {
   const { open, setOpen } = props
 
   const loginButton = (
-    <Button onClick={() => window.location.assign("https://sumai.co.kr/login")} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
+    <Button onClick={() => window.location.assign("https://sumai.co.kr/login?url="+window.location.href)} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
       <AccountIcon style={{ marginRight: "5px", }} />
         로그인
     </Button>

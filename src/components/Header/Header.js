@@ -15,7 +15,6 @@ import imgLogo from '../../images/sumai_logo_blue.png';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-// import FeedbackDialog from './FeedBackDialog';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
@@ -131,8 +130,6 @@ export default function Header(props) {
 
         </Toolbar>
       </AppBar>
-      {/* <FeedbackDialog open={this.state.dialogOpen} setOpen={this.dialogOpen} classes={classes} md={this.props.md}/>         */}
-
     </Box>
   )
 }

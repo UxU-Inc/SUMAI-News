@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: "center",
     textDecoration: 'none',
+    marginLeft: '25px',
   },
 
   loginButton: {
@@ -113,7 +114,7 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <a href="/" style={{ marginLeft: 5 }} className={classes.link} style={{minWidth: xsm ? "201px" : "142px"}}>
+          <a href="/" className={classes.link} style={{minWidth: xsm ? "201px" : "142px"}}>
             <img src={imgLogo} alt="SUMAI" className={classes.imgLogo} />
 
             <Typography className={classes.summaryTypo} style={{ fontSize: "28px", marginLeft: "10px" }}>

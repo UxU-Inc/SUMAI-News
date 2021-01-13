@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
   gridList: {
     width: "100%",
-    height: "100%",
   },
 }));
 
@@ -26,11 +25,16 @@ const useStyles = makeStyles((theme) => ({
 function ColsCount() {
   const theme = useTheme();
   const xsm = useMediaQuery(theme.breakpoints.between('xs', theme.breakpoints.values.xsm));  // 0~360
-  const sm = useMediaQuery(theme.breakpoints.between(theme.breakpoints.values.xsm, 'sm'));  // 360~720
+  const sm = useMediaQuery(theme.breakpoints.between(theme.breakpoints.values.xsm, 'sm'));  // 360~600
+  const md = useMediaQuery(theme.breakpoints.between('sm', 'md'));  // 600~720
+  const lg = useMediaQuery(theme.breakpoints.between('md', 'lg'));  // 720~1280
+  const xl = useMediaQuery(theme.breakpoints.between('lg', 'xl'));  // 1280~1920
   
   if(xsm)     return 1;
   else if(sm) return 2;
-  else        return 3;
+  else if(md) return 3;
+  else if(lg) return 4;
+  else if(xl) return 5;
 }
 
 
@@ -39,11 +43,10 @@ export default function Body() {
   
   return (
     <Box className={classes.root}>
-      <GridList cellHeight={400} className={classes.gridList} cols={ColsCount()}>
+      <GridList cellHeight={410} className={classes.gridList} cols={ColsCount()}>
         {tileData.map((tile) => (
-          <GridListTile style={{padding: "10px"}} key={tile.img} cols={tile.cols || 1}>
-            <Contents/>
-            <img src={tile.img} alt={tile.title} />
+          <GridListTile style={{padding: "10px"}} cols={tile.cols || 1}>
+            <Contents news_agency={tile.news_agency} title={tile.title} summary={tile.summary}/>
           </GridListTile>
         ))}
       </GridList>

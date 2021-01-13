@@ -29,6 +29,7 @@ import * as root from '../../rootValue';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    height: '64px',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -98,7 +99,7 @@ export default function Header(props) {
       <AppBar
         className={clsx(classes.appBar, {
         })}
-        position="static"
+        position="fixed"
         color="inherit"
         elevation={0}
       >

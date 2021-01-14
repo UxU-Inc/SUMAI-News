@@ -16,11 +16,20 @@ import axios from 'axios';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
   FeedbackDialogRoot: {
     justifyContent: 'center',
     margin: '0 auto',
+  },
+  
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: 'white',
   },
   FeedbackDialogContent: {
     display: 'flex',
@@ -109,7 +118,10 @@ export default function FeedbackDialog(props) {
         style={matches ? { width: '460px', } : {}} className={classes.FeedbackDialogRoot}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose} style={{ backgroundColor: root.PrimaryColor, color: 'white', padding: "10px 15px" }}>
           의견 보내기
-          </DialogTitle>
+        </DialogTitle>
+        <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
         <Box className={classes.FeedbackDialogContent} style={matches ? { minHeight: '200px', maxHeight: '250px' } : { height: '100%' }}>
           <TextareaAutosize className={classes.FeedbackDialogTextArea} maxLength="5000" autoFocus={true} onChange={handleMessage}
             placeholder="의견을 보내고 싶으신가요? 보내 주신 의견은 소중하게 활용되지만, 민감한 정보는 공유하지 말아 주세요. 궁금하신 점이 있나요? 도움말을 참조하시거나 지원팀에 문의해 보세요."

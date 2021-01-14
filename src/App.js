@@ -1,11 +1,13 @@
 import { useEffect, useCallback } from 'react';
 import Main from "./components/Main";
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { getStatusRequest, logoutRequest, getStatusFailure } from './actions/authentication';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
+import Body from './components/Body/Body';
+import Like from './components/Body/Like';
 
 
 function App() {
@@ -75,9 +77,20 @@ function App() {
 
   return (
     <Router>
-      <div>
-        <Route exact path="/" component={Main} />
-      </div>
+      <Switch>
+        <Route exact path="/" render={(props) => (
+          <Main {...props} Body={Body}/>
+        )} />
+        <Route exact path="/trending" render={(props) => (
+          <Main {...props} Body={Body}/>
+        )} />
+        <Route exact path="/history" render={(props) => (
+          <Main {...props} Body={Body}/>
+        )} />
+        <Route exact path="/like" render={(props) => (
+          <Main {...props} Body={Like}/>
+        )} />
+      </Switch>
     </Router>
   );
 }

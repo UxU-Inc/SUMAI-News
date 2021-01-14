@@ -1,13 +1,13 @@
 import React from 'react';
 
 import Header from "./Header/Header";
-import Body from "./Body/Body";
 
 import Box from '@material-ui/core/Box';
 import MiniDrawer from './Header/MiniDrawer';
 
 
-export default function Main() {
+export default function Main(props) {
+  const {Body} = props
   
   const [open, setOpen] = React.useState(false);
   return(

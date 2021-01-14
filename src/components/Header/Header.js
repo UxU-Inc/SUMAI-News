@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     height: '64px',
+    [theme.breakpoints.between(0, 580)]: {
+      height: '56px',
+    },
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -105,7 +108,7 @@ export default function Header(props) {
       >
         <Toolbar>
           <IconButton
-            color='#606060'
+            color='default'
             aria-label="open drawer"
             onClick={() => setOpen(!open)}
             edge="start"

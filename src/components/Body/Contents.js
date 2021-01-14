@@ -1,18 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Box from '@material-ui/core/Box';
 
-import NewsAgencyURL from './NewsAgency/NewsAgencyURL'
+import * as NewsAgency from './NewsAgency'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -50,12 +47,6 @@ function news_agency_logo(news_agency) {
   return '/images/news_agency/' + news_agency + '.png';
 }
 
-function onClickExternLink(news_agency) {
-  if(NewsAgencyURL(news_agency) != null) {
-    window.location.assign(NewsAgencyURL(news_agency))
-  }
-}
-
 
 export default function RecipeReviewCard(props) {
   const classes = useStyles();
@@ -67,7 +58,7 @@ export default function RecipeReviewCard(props) {
         className={classes.CardHeader}
         title={
           <Box display="flex" alignItems="center" >
-            <a href={NewsAgencyURL(news_agency)} className={classes.a}>
+            <a href={NewsAgency.Info[news_agency]?.url} className={classes.a}>
               <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} />
             </a>
             <div style={{ flexGrow: 1 }} />

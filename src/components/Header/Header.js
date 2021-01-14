@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     height: '64px',
-    [theme.breakpoints.between(0, 580)]: {
+    [theme.breakpoints.between(0, 600)]: {
       height: '56px',
     },
   },
@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     textDecoration: 'none',
     marginLeft: '25px',
+    [theme.breakpoints.between(0, 640)]: {
+      marginLeft: '13px',
+    },
   },
 
   loginButton: {
@@ -75,10 +78,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Header(props) {
+  const classes = useStyles();
   const theme = useTheme();
   const xsm = useMediaQuery(theme.breakpoints.up('xsm'));
+  const w_365 = useMediaQuery(theme.breakpoints.up(365));
+  const w_420 = useMediaQuery(theme.breakpoints.up(420));
+  const sm = useMediaQuery(theme.breakpoints.up('sm'));
   const md = useMediaQuery(theme.breakpoints.up('md'));
-  const classes = useStyles();
   const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn);
 
   const { open, setOpen } = props
@@ -117,17 +123,17 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <a href="/" className={classes.link} style={{minWidth: xsm ? "201px" : "142px"}}>
+          <a href="/" className={classes.link} style={{minWidth: w_420 ? "201px" : "142px"}}>
             <img src={imgLogo} alt="SUMAI" className={classes.imgLogo} />
 
             <Typography className={classes.summaryTypo} style={{ fontSize: "28px", marginLeft: "10px" }}>
-              {xsm ? "뉴스 요약" : "뉴스"}
+              {w_420 ? "뉴스 요약" : "뉴스"}
             </Typography>
           </a>
 
           <div style={{ flexGrow: 1 }} />
 
-          {xsm ? <Menu/> : <div style={{marginLeft: '10px'}}/>}
+          {w_365? <Menu/> : <div style={{marginLeft: '10px'}}/>}
 
           {isLoggedIn ? loginLayout : loginButton}
 

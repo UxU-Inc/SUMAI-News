@@ -15,8 +15,20 @@ import * as NewsAgency from './NewsAgency'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: '260px',
     height: '100%',
+
+    '&::-webkit-scrollbar': {
+      width: '0.15em'
+    },
+    '&::-webkit-scrollbar-track': {
+      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+      '-webkitBoxShadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.2)',
+      outline: '1px solid slategrey'
+    },
+
   },
   CardHeader: {
     borderBottom: '1px solid #e0e0e0',
@@ -37,9 +49,6 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
-  },
-  avatar: {
-    backgroundColor: red[500],
   },
 }));
 
@@ -70,8 +79,8 @@ export default function RecipeReviewCard(props) {
   }
 
   return (
-    <Card className={classes.root} variant="outlined">
-      <CardHeader
+    <Card className={classes.root} variant="outlined" display="flex" style={{flex: 1}} >
+      <CardHeader 
         className={classes.CardHeader}
         title={
           <Box display="flex" alignItems="center" >
@@ -85,15 +94,14 @@ export default function RecipeReviewCard(props) {
           </Box>
         }
         subheader={
-          <Typography variant="h6" style={{ color: "#000" }}>
+          <Typography style={{color: "#000"}}>
             {title}
           </Typography>
         }
       >
-
       </CardHeader>
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography color="textSecondary" component="p" style={{fontFamily: "NotoSansKR-Light", whiteSpace: "pre-wrap"}}>
           {summary}
         </Typography>
       </CardContent>

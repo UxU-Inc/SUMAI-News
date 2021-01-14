@@ -29,17 +29,51 @@ const useStyles = makeStyles((theme) => ({
   },
   gridList: {
     width: "100%",
+    margin: "16px 8px",
+    [theme.breakpoints.between(0, 580)]: {
+      margin: '0px 0px 15px 0px',
+    },
+    [theme.breakpoints.between(580, 640)]: {
+      margin: '0px 0px 15px 0px',
+    },
+    [theme.breakpoints.between(640, 760)]: {
+      margin: '8px 4px',
+    },
+    [theme.breakpoints.between(760, 840)]: {
+      margin: '16px 8px',
+    },
+    [theme.breakpoints.between(840, 1050)]: {
+      margin: '16px 4px',
+    },
+    [theme.breakpoints.between(1050, 1100)]: {
+      margin: '16px 4px',
+    },
+    [theme.breakpoints.between(1100, 1300)]: {
+      margin: '16px 4px',
+    },
   },
   gridListTile: {
-    padding: '10px',
-    [theme.breakpoints.between(xs_size, xsm_size)]: {
+    padding: '0px 8px 16px 8px',
+    [theme.breakpoints.between(0, 580)]: {
       padding: '0px 0px 15px 0px',
     },
-    [theme.breakpoints.between(xsm_size, sm_size)]: {
-      padding: '0px 5px 10px 5px',
+    [theme.breakpoints.between(580, 640)]: {
+      padding: '0px 0px 16px 0px',
     },
-    [theme.breakpoints.between(sm_size, md_size)]: {
-      padding: '10px',
+    [theme.breakpoints.between(640, 760)]: {
+      padding: '0px 4px 16px 4px',
+    },
+    [theme.breakpoints.between(760, 840)]: {
+      padding: '0px 8px 16px 8px',
+    },
+    [theme.breakpoints.between(840, 1050)]: {
+      padding: '0px 4px 16px 4px',
+    },
+    [theme.breakpoints.between(1050, 1100)]: {
+      padding: '0px 4px 16px 4px',
+    },
+    [theme.breakpoints.between(1100, 1300)]: {
+      padding: '0px 4px 16px 4px',
     },
   }
 }));
@@ -123,9 +157,9 @@ export default function Body() {
 
   return (
     <Box className={classes.root}>
-      <GridList cellHeight={410} className={classes.gridList} cols={viewCount}>
+      <GridList cellHeight={xsm ? 'auto' : 410} className={classes.gridList} style={{margin: "none"}} cols={viewCount}>
         {tileData.slice(0, dataCount).map((tile, key) => (
-          <GridListTile style={{padding: "10px"}} cols={tile.cols || 1} key={key}>
+          <GridListTile className={classes.gridListTile} style={{padding: "none"}} cols={tile.cols || 1} key={key}>
             <Contents news_agency={tile.news_agency} title={tile.title} summary={tile.summary} idx={tile.idx} currentId={currentId}/>
           </GridListTile>
         ))}

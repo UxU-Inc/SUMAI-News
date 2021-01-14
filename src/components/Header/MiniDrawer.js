@@ -126,8 +126,17 @@ export default function MiniDrawer(props) {
   };
 
   const onClickLink = (url) => {
-    history.push(url)
+    window.location.pathname===url? window.location.reload(): history.push(url)
   }
+
+  const setIconButtonColor = (url) => {
+    return window.location.pathname===url? 'primary': 'none'
+  }
+
+  const setBackGroundColor = (url) => {
+    return window.location.pathname===url? '#e6e6e6': '#fff'
+  }
+
   const onClickExternLink = (url) => {
     window.location.assign(url)
   }
@@ -151,21 +160,21 @@ export default function MiniDrawer(props) {
 
         <div className={classes.toolbar}/>
 
-        <List>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px'}} onClick={() => onClickLink("/")}>
-            <ListItemIcon > <HomeIcon color="primary" style={{fontSize: '30px'}}/> </ListItemIcon>
+        <List className="MenuList">
+          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/')}} onClick={() => onClickLink("/")}>
+            <ListItemIcon > <HomeIcon color={setIconButtonColor('/')} style={{fontSize: '30px'}}/> </ListItemIcon>
             <ListItemText disableTypography primary="홈" className={classes.listText} />
           </ListItem>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px'}} onClick={() => onClickLink("/trending")}>
-            <ListItemIcon> <WhatshotIcon style={{fontSize: '30px'}}/> </ListItemIcon>
+          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/trending')}} onClick={() => onClickLink("/trending")}>
+            <ListItemIcon> <WhatshotIcon color={setIconButtonColor('/trending')} style={{fontSize: '30px'}}/> </ListItemIcon>
             <ListItemText disableTypography primary="인기" className={classes.listText} />
           </ListItem>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px'}} onClick={() => onClickLink("/history")}>
-            <ListItemIcon> <HistoryIcon style={{fontSize: '30px'}}/> </ListItemIcon>
+          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/history')}} onClick={() => onClickLink("/history")}>
+            <ListItemIcon> <HistoryIcon color={setIconButtonColor('/history')} style={{fontSize: '30px'}}/> </ListItemIcon>
             <ListItemText disableTypography primary="열람 기록" className={classes.listText} />
           </ListItem>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px'}} onClick={() => onClickLink("/like")}>
-            <ListItemIcon> <ThumbUpIcon style={{fontSize: '30px'}}/> </ListItemIcon>
+          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/like')}} onClick={() => onClickLink("/like")}>
+            <ListItemIcon> <ThumbUpIcon color={setIconButtonColor('/like')} style={{fontSize: '30px'}}/> </ListItemIcon>
             <ListItemText disableTypography primary="좋아요 표시한 문서" className={classes.listText} />
           </ListItem>
         </List>

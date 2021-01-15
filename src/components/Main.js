@@ -9,15 +9,14 @@ import MiniDrawer from './Header/MiniDrawer';
 export default function Main(props) {
   const {Body} = props
   
-  const [colCount, setColCount] = React.useState(4)
   const [open, setOpen] = React.useState(false);
   return(
     <Box>
-      <Header open={open} setOpen={setOpen} colCount={colCount} setColCount={setColCount}/>
+      <Header open={open} setOpen={setOpen}/>
       
       <Box style={{display: 'flex'}}>
         <MiniDrawer open={open} setOpen={setOpen} />
-        <Body colCount={colCount}/>
+        <Body/>
       </Box>
 
     </Box>

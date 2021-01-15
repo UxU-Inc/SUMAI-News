@@ -1,6 +1,9 @@
 
-import { FormControl, InputBase, InputLabel, NativeSelect } from '@material-ui/core';
+import { Box, FormControl, InputBase, NativeSelect, InputLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setColumns } from 'reducers/contentSetting';
 
 
 const BootstrapInput = withStyles((theme) => ({
@@ -39,22 +42,50 @@ const BootstrapInput = withStyles((theme) => ({
 }))(InputBase);
 
 export default function ColController(props) {
-  const {colCount, setColCount} = props
+  const store = useSelector(store => store)
+  const columns = useSelector(store => store.contentSetting.columns)
+  const dispatch = useDispatch()
+
+  useEffect(() => { // 쿠키 읽기
+    const getCookie = (name) => {
+      const value = "; " + document.cookie;
+      const parts = value.split("; " + name + "=");
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+
+    let columns = getCookie('columns');
+
+    if (typeof columns === "string") {
+      dispatch(setColumns(Number(columns))) // 쿠키를 임의로 변경시 NaN 에러 발생 가능
+    };
+  }, [dispatch])
+
+  useEffect(() => {
+    console.log(store)
+  }, [store])
+
+  const onColCount = (event) => {
+    const col=event.target.value
+    dispatch(setColumns(col))
+    document.cookie = 'columns=' + col + ';path=/;';
+  }
 
   return (
-    <FormControl>
-      {/* <InputLabel htmlFor="demo-customized-select-native" variant='filled' >갯수</InputLabel> */}
-      <NativeSelect
-        id="demo-simple-select-outlined"
-        value={colCount}
-        onChange={(event) => setColCount(event.target.value)}
-        input={<BootstrapInput />}
-      >
-        <option value={1}>1</option>
-        <option value={2}>2</option>
-        <option value={3}>3</option>
-        <option value={4}>4</option>
-      </NativeSelect>
-    </FormControl>
+    <Box {...props}>
+      <FormControl >
+        {/* <InputLabel htmlFor="demo-customized-select-native" variant='filled' >갯수</InputLabel> */}
+        <NativeSelect
+          id="demo-simple-select-outlined"
+          value={columns}
+          onChange={onColCount}
+          input={<BootstrapInput />}
+        >
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+        </NativeSelect>
+      </FormControl>
+    </Box>
   )
 }

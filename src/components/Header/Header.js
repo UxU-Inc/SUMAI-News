@@ -86,7 +86,7 @@ export default function Header(props) {
   const md = useMediaQuery(theme.breakpoints.up('md'));
   const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn);
 
-  const { colCount, setColCount, open, setOpen } = props
+  const { open, setOpen } = props
 
   const loginButton = (
     <Button onClick={() => window.location.assign("https://sumai.co.kr/login?url="+window.location.href)} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
@@ -131,7 +131,8 @@ export default function Header(props) {
           </a>
 
           <div style={{ flexGrow: 1 }} />
-          <ColController colCount={colCount} setColCount={setColCount}/>
+          <Box marginRight="10px">스크린 수</Box>
+          <ColController marginRight="30px"/>
 
           {w_365? <Menu/> : <div style={{marginLeft: '10px'}}/>}
 

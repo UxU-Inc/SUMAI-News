@@ -3,9 +3,11 @@ import authentication from './authentication';
 import mainRecord from './mainRecord';
 import clientInfo from './clientInfo'
 import { combineReducers } from 'redux';
+import contentSetting from './contentSetting';
  
 export default combineReducers({
     authentication,
     mainRecord,
-    clientInfo
+    clientInfo,
+    contentSetting,
 });

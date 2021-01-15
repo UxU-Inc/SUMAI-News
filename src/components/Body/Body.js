@@ -14,6 +14,7 @@ import tileData from './tileData';
 
 import Contents from './Contents';
 import { NativeSelect } from '@material-ui/core';
+import contentSetting from './../../reducers/contentSetting';
 
 const xs_size = 0;
 const xsm_size = 580;
@@ -83,18 +84,18 @@ export default function Body(props) {
   const sm = useMediaQuery(theme.breakpoints.between(xsm_size, sm_size));
   const md = useMediaQuery(theme.breakpoints.between(sm_size, md_size));
   const lg = useMediaQuery(theme.breakpoints.up(md_size));
-
-  const {colCount} = props
+  
+  const columns = useSelector(store => store.contentSetting.columns)
 
   const ColsCount = useCallback(() => {
     const changeCount = (count) => {
-      setViewCount(count< colCount? count: colCount)
+      setViewCount(count< columns? count: columns)
     }
     if(xsm)     changeCount(1);
     else if(sm) changeCount(2);
     else if(md) changeCount(3);
     else if(lg) changeCount(4);
-  }, [xsm, sm, md, lg, colCount])
+  }, [xsm, sm, md, lg, columns])
 
   const NewsMain = useCallback((idx, cnt) => {
     const id = currentId
@@ -167,7 +168,7 @@ export default function Body(props) {
         {['', '', '', ''].slice(0, viewCount).map((t, k) => ( 
           <Grid container direction="column" style={{height:"auto"}} key={k}>
             {newsData.filter((x, idx) => idx%viewCount===k).map((tile, key) => (
-              <Grid item key={key} className={classes.gridContents} style={{padding: "none"}}>
+              <Grid item key={key} className={classes.gridContents} style={{padding: "none", maxWidth:"1000px"}}>
                 <Contents news={tile} currentId={currentId}/>
               </Grid>
             ))}

@@ -52,6 +52,15 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
+  font1: {
+    fontSize:'12px'
+  },
+  font2: {
+    fontSize:'14px'
+  },
+  font3: {
+    fontSize:'16px'
+  },
 }));
 
 
@@ -87,6 +96,9 @@ export default function RecipeReviewCard(props) {
     } else {
       setLoginError(true)
     }
+  }
+  const changeFontSize = () => {
+    return classes.font2
   }
 
   const snackBarHandleClose = (event, reason) => {
@@ -125,7 +137,7 @@ export default function RecipeReviewCard(props) {
       </CardHeader>
         {/* <Typography color="textSecondary" component="p" style={{fontFamily: "NotoSansKR-Light", whiteSpace: "pre-wrap"}}> */}
       <CardContent onClick={() => window.open(url)} style={{textDecoration: 'none', cursor:'pointer'}}>
-        <Typography variant="body2" color="textSecondary" component="p" style={{pointerEvents: "none", userSelect: "none"}}>
+        <Typography className={changeFontSize()} variant="body2" color="textSecondary" component="p" style={{pointerEvents: "none", userSelect: "none"}}>
           {summary}
         </Typography>
       </CardContent>

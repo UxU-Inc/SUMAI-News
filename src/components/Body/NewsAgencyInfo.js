@@ -1,4 +1,4 @@
-export const Info = {
+export const list = {
     'BBS NEWS': { url: 'http://news.bbsi.co.kr/' },
     'CEO스코어데일리': { url: 'http://www.ceoscoredaily.com/' },
     'CNB뉴스': { url: 'http://www.cnbnews.com/' },

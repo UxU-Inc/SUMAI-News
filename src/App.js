@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
 import Body from './components/Body/Body';
 import Like from './components/Body/Like';
+import NewsAgencyBookmark from './components/Body/NewsAgencyBookmark';
 
 
 function App() {
@@ -89,6 +90,9 @@ function App() {
         )} />
         <Route exact path="/like" render={(props) => (
           <Main {...props} Body={Like}/>
+        )} />
+        <Route exact path="/newsAgencyBookmark" render={(props) => (
+          <Main {...props} Body={NewsAgencyBookmark}/>
         )} />
       </Switch>
     </Router>

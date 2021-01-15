@@ -12,7 +12,7 @@ import axios from 'axios';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import * as NewsAgency from './NewsAgency'
+import * as NewsAgencyInfo from './NewsAgencyInfo'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -99,7 +99,7 @@ export default function RecipeReviewCard(props) {
         className={classes.CardHeader}
         title={
           <Box display="flex" alignItems="center" >
-            <Box onClick={() => window.open(NewsAgency.Info[news_agency]?.url)} className={classes.imgBox}>
+            <Box onClick={() => window.open(NewsAgencyInfo.list[news_agency]?.url)} className={classes.imgBox}>
               <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} />
             </Box>
             <div style={{ flexGrow: 1 }} />

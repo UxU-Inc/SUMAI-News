@@ -17,6 +17,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import HistoryIcon from '@material-ui/icons/History';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 import MailIcon from '@material-ui/icons/Mail';
 import FeedbackDialog from './FeedbackDialog';
 
@@ -176,6 +177,13 @@ export default function MiniDrawer(props) {
           <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/like')}} onClick={() => onClickLink("/like")}>
             <ListItemIcon> <ThumbUpIcon color={setIconButtonColor('/like')} style={{fontSize: '30px'}}/> </ListItemIcon>
             <ListItemText disableTypography primary="좋아요 표시한 문서" className={classes.listText} />
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/newsAgencyBookmark')}} onClick={() => onClickLink("/newsAgencyBookmark")}>
+            <ListItemIcon> <BookmarkIcon color={setIconButtonColor('/newsAgencyBookmark')} style={{fontSize: '30px'}}/> </ListItemIcon>
+            <ListItemText disableTypography primary="뉴스사 즐겨찾기" className={classes.listText} />
           </ListItem>
         </List>
         <Divider />

@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Like() {
+export default function History() {
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [dataCount, setDataCount] = useState(0)
@@ -99,10 +99,11 @@ export default function Like() {
     else        setViewCount(4);
   }, [xsm, sm, md])
 
-  const LikedNews = useCallback((time, cnt) => {
+  const History = useCallback((time, cnt) => {
     const id = currentId
-    axios.post('http://localhost:3306/api/news/likednews', { id, time, cnt })   //링크 바꿔야됨
+    axios.post('http://localhost:3306/api/news/history', { id, time, cnt })   //링크 바꿔야됨
     .then((response) => {
+        console.log(response.data)
       setNewsData(newsData.concat(response.data))
       if(response.data.length < cnt) {
           setIsAllLoad(true)
@@ -137,11 +138,11 @@ export default function Like() {
     
     if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 250 && !loading && !isAllLoad) {
       setLoading(true)
-      LikedNews(newsData[newsData.length-1].requestTime, viewCount*3-(dataCount%viewCount))
+      History(newsData[newsData.length-1].requestTime, viewCount*3-(dataCount%viewCount))
       setDataCount(dataCount+viewCount*3-(dataCount%viewCount))
       console.log(newsData[newsData.length-1].requestTime)
     }
-  }, [loading, newsData, dataCount, viewCount, LikedNews, isAllLoad]);
+  }, [loading, newsData, dataCount, viewCount, History, isAllLoad]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -157,16 +158,16 @@ export default function Like() {
 
     if(dataCount < viewCount*3) {
       setLoading(true)
-      LikedNews(requestTime, viewCount*3-(dataCount%viewCount))
+      History(requestTime, viewCount*3-(dataCount%viewCount))
       setDataCount(dataCount+viewCount*3-(dataCount%viewCount))
     } else if(dataCount%viewCount){
       setDataCount(dataCount-(dataCount%viewCount))
     }
-  }, [ColsCount, viewCount, LikedNews, newsData, dataCount, handleSkeleton]);
+  }, [ColsCount, viewCount, History, newsData, dataCount, handleSkeleton]);
   
   return(
     <Box className={classes.root}>
-      {newsData.length === 0? <Box>좋아요를 누른 뉴스가 없습니다.</Box>:null}
+      {newsData.length === 0? <Box>열람한 뉴스가 없습니다.</Box>:null}
       <Box display="flex">
         {['', '', '', ''].slice(0, viewCount).map((t, k) => ( 
         <Grid container direction="column" style={{height:"auto"}} key={k}>

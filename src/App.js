@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
 import Body from './components/Body/Body';
 import Like from './components/Body/Like';
+import History from './components/Body/History';
 import NewsAgencyBookmark from './components/Body/NewsAgencyBookmark';
 
 
@@ -86,7 +87,7 @@ function App() {
           <Main {...props} Body={Body}/>
         )} />
         <Route exact path="/history" render={(props) => (
-          <Main {...props} Body={Body}/>
+          <Main {...props} Body={History}/>
         )} />
         <Route exact path="/like" render={(props) => (
           <Main {...props} Body={Like}/>

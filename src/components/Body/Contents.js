@@ -66,13 +66,13 @@ function Alert(props) {
 export default function RecipeReviewCard(props) {
   const classes = useStyles();
   const { news, currentId } = props;
-  const { idx, title, url, news_agency, summary,  clicked } = news;
+  const { idx, title, url, news_agency, summary, liked_ } = news;
   const [liked, setIiked] = useState(false)
   const [loginError, setLoginError] = useState(false)
 
   useEffect(() => {
-    setIiked(!!clicked)
-  }, [clicked, idx]);
+    setIiked(!!liked_)
+  }, [liked_, idx]);
 
   const like = () => {
     if(currentId !== "") {
@@ -89,6 +89,19 @@ export default function RecipeReviewCard(props) {
     }
   }
 
+  const click = () => {
+    window.open(url)
+    if(currentId !== "") {
+      const id = currentId
+      axios.post('http://localhost:3306/api/news/click', { id, idx })  //링크 바꿔야됨
+      .then((response) => {
+        
+      }).catch((error) => {
+  
+      })
+    }
+  }
+  
   const snackBarHandleClose = (event, reason) => {
     setLoginError(false)
   }
@@ -115,7 +128,7 @@ export default function RecipeReviewCard(props) {
         }
         // <Typography style={{ color: "#000" }}>
         subheader={
-          <Box onClick={() => window.open(url)} style={{textDecoration: 'none', cursor:'pointer', paddingBottom:"8px"}}>
+          <Box onClick={() => click()} style={{textDecoration: 'none', cursor:'pointer', paddingBottom:"8px"}}>
             <Typography variant="h6" style={{ color: "#000" }}>
               {title}
             </Typography>

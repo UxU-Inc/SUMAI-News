@@ -85,9 +85,9 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-  }, 
+  },
   listText: {
-    fontFamily: "NotoSansKR-Regular",
+    fontFamily: "NotoSansKR-Regular",
     fontSize: 15,
   },
 
@@ -107,6 +107,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+function ListItemCreater(props) {
+  const {url, primary, history, Icon, sm, classes} = props
+
+  const backgoroundColor = window.location.pathname === url ? '#e6e6e6' : '#fff'
+  const iconButtonColor = window.location.pathname === url ? 'primary' : 'inherit'
+  const Link = () => {window.location.pathname === url ? window.location.reload() : history.push(url)}
+
+  return (
+    <ListItem button style={{ padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: backgoroundColor}} onClick={Link}>
+      <ListItemIcon> <Icon color={iconButtonColor} style={{ fontSize: '30px' }} /> </ListItemIcon>
+      <ListItemText disableTypography primary={primary} className={classes.listText} />
+    </ListItem>
+  )
+
+}
+
 export default function MiniDrawer(props) {
   const theme = useTheme();
   const xsm = useMediaQuery(theme.breakpoints.up('xsm'));
@@ -114,34 +130,9 @@ export default function MiniDrawer(props) {
   const classes = useStyles();
   const history = useHistory();
 
-  const {open, setOpen} = props
+  const { open, setOpen } = props
 
   const [dialogOpen, setDialogOpen] = React.useState(false)
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  const onClickLink = (url) => {
-    window.location.pathname===url? window.location.reload(): history.push(url)
-  }
-
-  const setIconButtonColor = (url) => {
-    return window.location.pathname===url? 'primary': 'none'
-  }
-
-  const setBackGroundColor = (url) => {
-    return window.location.pathname===url? '#e6e6e6': '#fff'
-  }
-
-  const onClickExternLink = (url) => {
-    window.location.assign(url)
-  }
-
 
   return (
     <Box>
@@ -159,32 +150,17 @@ export default function MiniDrawer(props) {
         }}
       >
 
-        <div className={classes.toolbar}/>
+        <div className={classes.toolbar} />
 
         <List className="MenuList">
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/')}} onClick={() => onClickLink("/")}>
-            <ListItemIcon > <HomeIcon color={setIconButtonColor('/')} style={{fontSize: '30px'}}/> </ListItemIcon>
-            <ListItemText disableTypography primary="홈" className={classes.listText} />
-          </ListItem>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/trending')}} onClick={() => onClickLink("/trending")}>
-            <ListItemIcon> <WhatshotIcon color={setIconButtonColor('/trending')} style={{fontSize: '30px'}}/> </ListItemIcon>
-            <ListItemText disableTypography primary="인기" className={classes.listText} />
-          </ListItem>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/history')}} onClick={() => onClickLink("/history")}>
-            <ListItemIcon> <HistoryIcon color={setIconButtonColor('/history')} style={{fontSize: '30px'}}/> </ListItemIcon>
-            <ListItemText disableTypography primary="열람 기록" className={classes.listText} />
-          </ListItem>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/like')}} onClick={() => onClickLink("/like")}>
-            <ListItemIcon> <ThumbUpIcon color={setIconButtonColor('/like')} style={{fontSize: '30px'}}/> </ListItemIcon>
-            <ListItemText disableTypography primary="좋아요 표시한 문서" className={classes.listText} />
-          </ListItem>
+          <ListItemCreater sm={sm} classes={classes} Icon={HomeIcon} url={'/'} primary={"홈"} history={history}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={WhatshotIcon} url={'/trending'} primary={"인기"} history={history}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={HistoryIcon} url={'/history'} primary={"열람 기록"} history={history}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={ThumbUpIcon} url={'/like'} primary={"좋아요 표시한 문서"} history={history}/>
         </List>
         <Divider />
         <List>
-          <ListItem button style={{padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: setBackGroundColor('/newsAgencyBookmark')}} onClick={() => onClickLink("/newsAgencyBookmark")}>
-            <ListItemIcon> <BookmarkIcon color={setIconButtonColor('/newsAgencyBookmark')} style={{fontSize: '30px'}}/> </ListItemIcon>
-            <ListItemText disableTypography primary="뉴스사 즐겨찾기" className={classes.listText} />
-          </ListItem>
+          <ListItemCreater sm={sm} classes={classes} Icon={BookmarkIcon} url={'/newsAgencyBookmark'} primary={"뉴스사 즐겨찾기"} history={history}/>
         </List>
         <Divider />
         <List>

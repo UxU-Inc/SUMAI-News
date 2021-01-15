@@ -2,15 +2,11 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Box from '@material-ui/core/Box';
-import GridList from '@material-ui/core/GridList';
 import Grid from '@material-ui/core/Grid';
-import GridListTile from '@material-ui/core/GridListTile';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-
-import tileData from './tileData';
 
 import Contents from './Contents';
 
@@ -79,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Body() {
+export default function History() {
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [dataCount, setDataCount] = useState(0)
@@ -103,13 +99,14 @@ export default function Body() {
     else        setViewCount(4);
   }, [xsm, sm, md])
 
-  const NewsMain = useCallback((idx, cnt) => {
+  const History = useCallback((time, cnt) => {
     const id = currentId
-    axios.post('http://localhost:3306/api/news/lastest', { id, idx, cnt })   //링크 바꿔야됨
+    axios.post('http://localhost:3306/api/news/history', { id, time, cnt })   //링크 바꿔야됨
     .then((response) => {
+        console.log(response.data)
       setNewsData(newsData.concat(response.data))
       if(response.data.length < cnt) {
-        setIsAllLoad(true)
+          setIsAllLoad(true)
       }
       setLoading(false)
     }).catch((error) => {
@@ -141,11 +138,11 @@ export default function Body() {
     
     if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 250 && !loading && !isAllLoad) {
       setLoading(true)
-      NewsMain(newsData[newsData.length-1].idx-1, viewCount*3-(dataCount%viewCount))
+      History(newsData[newsData.length-1].requestTime, viewCount*3-(dataCount%viewCount))
       setDataCount(dataCount+viewCount*3-(dataCount%viewCount))
-      console.log(newsData[newsData.length-1].idx-1)
+      console.log(newsData[newsData.length-1].requestTime)
     }
-  }, [loading, newsData, dataCount, viewCount, NewsMain, isAllLoad]);
+  }, [loading, newsData, dataCount, viewCount, History, isAllLoad]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -155,49 +152,37 @@ export default function Body() {
   useEffect(() => {
     ColsCount()
     handleSkeleton()
-    let idx = null
-    if(newsData[newsData.length-1]) idx = newsData[newsData.length-1].idx-1;
-    else idx = -1;
+    let requestTime = null
+    if(newsData[newsData.length-1]) requestTime = newsData[newsData.length-1].requestTime;
+    else requestTime = -1;
 
     if(dataCount < viewCount*3) {
       setLoading(true)
-      NewsMain(idx, viewCount*3-(dataCount%viewCount))
+      History(requestTime, viewCount*3-(dataCount%viewCount))
       setDataCount(dataCount+viewCount*3-(dataCount%viewCount))
     } else if(dataCount%viewCount){
       setDataCount(dataCount-(dataCount%viewCount))
     }
-  }, [ColsCount, viewCount, NewsMain, newsData, dataCount, handleSkeleton]);
-
-  return (
+  }, [ColsCount, viewCount, History, newsData, dataCount, handleSkeleton]);
+  
+  return(
     <Box className={classes.root}>
+      {newsData.length === 0? <Box>열람한 뉴스가 없습니다.</Box>:null}
       <Box display="flex">
         {['', '', '', ''].slice(0, viewCount).map((t, k) => ( 
-          <Grid container direction="column" style={{height:"auto"}} key={k}>
-            {newsData.filter((x, idx) => idx%viewCount===k).map((tile, key) => (
-              <Grid item key={key}>
-                <Contents news={tile} currentId={currentId}/>
-              </Grid>
-            ))}
-            <Grid style={newsData.length === 0? {display:"none"}:{padding: "10px"}} ref={(el) => itemRef.current[k] = el}>
-              {!isAllLoad && !hideSkel[k]? <><Skeleton variant="text" height={100} />
-              <Skeleton variant="rect" height={300} /></>:null}
-            </Grid>
+        <Grid container direction="column" style={{height:"auto"}} key={k}>
+          {newsData.filter((x, idx) => idx%viewCount===k).map((tile, key) => (
+          <Grid item key={key}>
+            <Contents news={tile} currentId={currentId}/>
           </Grid>
+          ))}
+          <Grid style={newsData.length === 0? {display:"none"}:{padding: "10px"}} ref={(el) => itemRef.current[k] = el}>
+          {!isAllLoad && !hideSkel[k]? <><Skeleton variant="text" height={100} />
+          <Skeleton variant="rect" height={300} /></>:null}
+          </Grid>
+        </Grid>
         ))}
       </Box>
-      {/* <GridList cellHeight={xsm ? 'auto' : 410} className={classes.gridList} style={{margin: "none"}} cols={viewCount}>
-        {tileData.slice(0, dataCount).map((tile, key) => (
-          <GridListTile className={classes.gridListTile} style={{padding: "none"}} cols={tile.cols || 1} key={key}>
-            <Contents news_agency={tile.news_agency} title={tile.title} summary={tile.summary} idx={tile.idx} currentId={currentId}/>
-          </GridListTile>
-        ))}
-        {!isAllLoad? ['', '', '', ''].slice(0, viewCount).map((tile, key) => ( 
-          <GridListTile style={newsData.length === 0? {display:"none"}:{padding: "10px"}} key={key}>
-            <Skeleton variant="text" height={100} />
-            <Skeleton variant="rect" height={300} />
-          </GridListTile>
-        )):null}
-      </GridList> */}
     </Box>
   )
 }

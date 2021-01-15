@@ -1,25 +1,15 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import GridList from '@material-ui/core/GridList';
 import Grid from '@material-ui/core/Grid';
-import GridListTile from '@material-ui/core/GridListTile';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-import tileData from './tileData';
-
 import Contents from './Contents';
 import { NativeSelect } from '@material-ui/core';
 import contentSetting from './../../reducers/contentSetting';
-
-const xs_size = 0;
-const xsm_size = 580;
-const sm_size = 840;
-const md_size = 1100;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,34 +58,15 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Body(props) {
+  const { colsCount } = props
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
-  const [dataCount, setDataCount] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [viewCount, setViewCount] = useState(0)
   const [isAllLoad, setIsAllLoad] = useState(false)
   const [hideSkel, setHideSkel] = useState([])
   const currentId = useSelector(store => store.authentication.status.currentId)
 
   const itemRef = useRef([])
-
-  const theme = useTheme();
-  const xsm = useMediaQuery(theme.breakpoints.between(xs_size, xsm_size));
-  const sm = useMediaQuery(theme.breakpoints.between(xsm_size, sm_size));
-  const md = useMediaQuery(theme.breakpoints.between(sm_size, md_size));
-  const lg = useMediaQuery(theme.breakpoints.up(md_size));
-  
-  const columns = useSelector(store => store.contentSetting.columns)
-
-  const ColsCount = useCallback(() => {
-    const changeCount = (count) => {
-      setViewCount(count< columns? count: columns)
-    }
-    if(xsm)     changeCount(1);
-    else if(sm) changeCount(2);
-    else if(md) changeCount(3);
-    else if(lg) changeCount(4);
-  }, [xsm, sm, md, lg, columns])
 
   const NewsMain = useCallback((idx, cnt) => {
     const id = currentId
@@ -112,20 +83,18 @@ export default function Body(props) {
   }, [newsData, currentId])
 
   const handleSkeleton = useCallback(() => {
-    var arr = [], temp = []
-    var sum = 0
-    for(let i=0; i<viewCount; i++) {
+    let arr = [], temp = []
+    let sum = 0
+    for(let i=0; i<colsCount; i++) {
       arr[i] = itemRef.current[i].offsetTop
       sum += arr[i]
     }
-    sum /= viewCount
+    sum /= colsCount
     arr.forEach((el, i) => {
-      arr[i] -= sum
-      if(arr[i] > 200) temp[i] = true
+      if(arr[i] - sum > 200) temp[i] = true
     })
     setHideSkel(temp)
-    console.log(arr)
-  }, [viewCount]);
+  }, [colsCount]);
 
   const handleScroll = useCallback(() => {
     const { innerHeight } = window;
@@ -135,11 +104,10 @@ export default function Body(props) {
     
     if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 250 && !loading && !isAllLoad) {
       setLoading(true)
-      NewsMain(newsData[newsData.length-1].idx-1, viewCount*3-(dataCount%viewCount))
-      setDataCount(dataCount+viewCount*3-(dataCount%viewCount))
+      NewsMain(newsData[newsData.length-1].idx-1, colsCount===1? 12:24)
       console.log(newsData[newsData.length-1].idx-1)
     }
-  }, [loading, newsData, dataCount, viewCount, NewsMain, isAllLoad]);
+  }, [loading, newsData, colsCount, NewsMain, isAllLoad]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -147,27 +115,24 @@ export default function Body(props) {
   }, [handleScroll]);
 
   useEffect(() => {
-    ColsCount()
     handleSkeleton()
-    let idx = null
+    let idx = null 
     if(newsData[newsData.length-1]) idx = newsData[newsData.length-1].idx-1;
     else idx = -1;
 
-    if(dataCount < viewCount*3) {
+    if(!isAllLoad && newsData.length < (colsCount===1? 12:24)) {
       setLoading(true)
-      NewsMain(idx, viewCount*3-(dataCount%viewCount))
-      setDataCount(dataCount+viewCount*3-(dataCount%viewCount))
-    } else if(dataCount%viewCount){
-      setDataCount(dataCount-(dataCount%viewCount))
+      NewsMain(idx, colsCount===1? 12:24)  
     }
-  }, [ColsCount, viewCount, NewsMain, newsData, dataCount, handleSkeleton]);
+
+  }, [colsCount, NewsMain, newsData, handleSkeleton, isAllLoad]);
 
   return (
     <Box className={classes.root}>
       <Box display="flex" width="100vw">
-        {['', '', '', ''].slice(0, viewCount).map((t, k) => ( 
+        {['', '', '', ''].slice(0, colsCount).map((t, k) => ( 
           <Grid container direction="column" style={{height:"auto"}} key={k}>
-            {newsData.filter((x, idx) => idx%viewCount===k).map((tile, key) => (
+            {newsData.slice(0, newsData.length).filter((x, idx) => idx%colsCount===k).map((tile, key) => (
               <Grid item key={key} className={classes.gridContents} style={{padding: "none", maxWidth:"1000px"}}>
                 <Contents news={tile} currentId={currentId}/>
               </Grid>
@@ -179,19 +144,6 @@ export default function Body(props) {
           </Grid>
         ))}
       </Box>
-      {/* <GridList cellHeight={xsm ? 'auto' : 410} className={classes.gridList} style={{margin: "none"}} cols={viewCount}>
-        {tileData.slice(0, dataCount).map((tile, key) => (
-          <GridListTile className={classes.gridListTile} style={{padding: "none"}} cols={tile.cols || 1} key={key}>
-            <Contents news_agency={tile.news_agency} title={tile.title} summary={tile.summary} idx={tile.idx} currentId={currentId}/>
-          </GridListTile>
-        ))}
-        {!isAllLoad? ['', '', '', ''].slice(0, viewCount).map((tile, key) => ( 
-          <GridListTile style={newsData.length === 0? {display:"none"}:{padding: "10px"}} key={key}>
-            <Skeleton variant="text" height={100} />
-            <Skeleton variant="rect" height={300} />
-          </GridListTile>
-        )):null}
-      </GridList> */}
     </Box>
   )
 }

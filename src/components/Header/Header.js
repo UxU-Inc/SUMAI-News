@@ -22,7 +22,7 @@ import AccountManagementMenu from './AccountManagementMenu';
 import Menu from './Menu'
 
 import * as root from '../../rootValue';
-import ColController from './ColController';
+import ControllerMenu from './Controller/ControllerMenu';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,6 +81,7 @@ export default function Header(props) {
   const theme = useTheme();
   const xsm = useMediaQuery(theme.breakpoints.up('xsm'));
   const w_365 = useMediaQuery(theme.breakpoints.up(365));
+  const w_405 = useMediaQuery(theme.breakpoints.up(405));
   const w_420 = useMediaQuery(theme.breakpoints.up(420));
   const sm = useMediaQuery(theme.breakpoints.up('sm'));
   const md = useMediaQuery(theme.breakpoints.up('md'));
@@ -131,8 +132,7 @@ export default function Header(props) {
           </a>
 
           <div style={{ flexGrow: 1 }} />
-          <Box marginRight="10px">스크린 수</Box>
-          <ColController marginRight="30px"/>
+          {w_405?<ControllerMenu/>:<span/>}
 
           {w_365? <Menu/> : <div style={{marginLeft: '10px'}}/>}
 

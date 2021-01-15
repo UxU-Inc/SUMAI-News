@@ -110,7 +110,7 @@ function ListItemCreater(props) {
   const {url, primary, history, Icon, sm, classes} = props
 
   const backgoroundColor = window.location.pathname === url ? '#e6e6e6' : '#fff'
-  const iconButtonColor = window.location.pathname === url ? 'primary' : 'none'
+  const iconButtonColor = window.location.pathname === url ? 'primary' : 'inherit'
   const Link = () => {window.location.pathname === url ? window.location.reload() : history.push(url)}
 
   return (

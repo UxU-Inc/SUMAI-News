@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import tileData from './tileData';
 
 import Contents from './Contents';
+import { NativeSelect } from '@material-ui/core';
 
 const xs_size = 0;
 const xsm_size = 580;
@@ -26,15 +27,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.default,
-  },
-  gridList: {
-    width: "100%",
+
     margin: "16px 8px",
-    [theme.breakpoints.between(0, 580)]: {
-      margin: '0px 0px 15px 0px',
+    [theme.breakpoints.between(0, 640)]: {
+      margin: '0px',
     },
     [theme.breakpoints.between(580, 640)]: {
-      margin: '0px 0px 15px 0px',
+      margin: '0px',
     },
     [theme.breakpoints.between(640, 760)]: {
       margin: '8px 4px',
@@ -42,44 +41,32 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.between(760, 840)]: {
       margin: '16px 8px',
     },
-    [theme.breakpoints.between(840, 1050)]: {
-      margin: '16px 4px',
-    },
-    [theme.breakpoints.between(1050, 1100)]: {
-      margin: '16px 4px',
-    },
-    [theme.breakpoints.between(1100, 1300)]: {
+    [theme.breakpoints.between(840, 1300)]: {
       margin: '16px 4px',
     },
   },
-  gridListTile: {
+  gridContents: {
     padding: '0px 8px 16px 8px',
     [theme.breakpoints.between(0, 580)]: {
-      padding: '0px 0px 15px 0px',
-    },
-    [theme.breakpoints.between(580, 640)]: {
       padding: '0px 0px 16px 0px',
     },
+    [theme.breakpoints.between(580, 640)]: {
+      padding: '0px 0px 8px 0px',
+    },
     [theme.breakpoints.between(640, 760)]: {
-      padding: '0px 4px 16px 4px',
+      padding: '0px 4px 8px 4px',
     },
     [theme.breakpoints.between(760, 840)]: {
       padding: '0px 8px 16px 8px',
     },
-    [theme.breakpoints.between(840, 1050)]: {
-      padding: '0px 4px 16px 4px',
-    },
-    [theme.breakpoints.between(1050, 1100)]: {
-      padding: '0px 4px 16px 4px',
-    },
-    [theme.breakpoints.between(1100, 1300)]: {
-      padding: '0px 4px 16px 4px',
+    [theme.breakpoints.between(840, 1300)]: {
+      padding: '0px 4px 8px 4px',
     },
   }
 }));
 
 
-export default function Body() {
+export default function Body(props) {
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [dataCount, setDataCount] = useState(0)
@@ -95,13 +82,19 @@ export default function Body() {
   const xsm = useMediaQuery(theme.breakpoints.between(xs_size, xsm_size));
   const sm = useMediaQuery(theme.breakpoints.between(xsm_size, sm_size));
   const md = useMediaQuery(theme.breakpoints.between(sm_size, md_size));
+  const lg = useMediaQuery(theme.breakpoints.up(md_size));
+
+  const {colCount} = props
 
   const ColsCount = useCallback(() => {
-    if(xsm)     setViewCount(1);
-    else if(sm) setViewCount(2);
-    else if(md) setViewCount(3);
-    else        setViewCount(4);
-  }, [xsm, sm, md])
+    const changeCount = (count) => {
+      setViewCount(count< colCount? count: colCount)
+    }
+    if(xsm)     changeCount(1);
+    else if(sm) changeCount(2);
+    else if(md) changeCount(3);
+    else if(lg) changeCount(4);
+  }, [xsm, sm, md, lg, colCount])
 
   const NewsMain = useCallback((idx, cnt) => {
     const id = currentId
@@ -120,10 +113,10 @@ export default function Body() {
   const handleSkeleton = useCallback(() => {
     var arr = [], temp = []
     var sum = 0
-    itemRef.current.forEach((el, i) => {
-      arr[i] = el.offsetTop
-      sum += el.offsetTop
-    })
+    for(let i=0; i<viewCount; i++) {
+      arr[i] = itemRef.current[i].offsetTop
+      sum += arr[i]
+    }
     sum /= viewCount
     arr.forEach((el, i) => {
       arr[i] -= sum
@@ -155,7 +148,7 @@ export default function Body() {
   useEffect(() => {
     ColsCount()
     handleSkeleton()
-    var idx = null
+    let idx = null
     if(newsData[newsData.length-1]) idx = newsData[newsData.length-1].idx-1;
     else idx = -1;
 
@@ -170,11 +163,11 @@ export default function Body() {
 
   return (
     <Box className={classes.root}>
-      <Box display="flex">
+      <Box display="flex" width="100vw">
         {['', '', '', ''].slice(0, viewCount).map((t, k) => ( 
           <Grid container direction="column" style={{height:"auto"}} key={k}>
             {newsData.filter((x, idx) => idx%viewCount===k).map((tile, key) => (
-              <Grid item key={key}>
+              <Grid item key={key} className={classes.gridContents} style={{padding: "none"}}>
                 <Contents news={tile} currentId={currentId}/>
               </Grid>
             ))}

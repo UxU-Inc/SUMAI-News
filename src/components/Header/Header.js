@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
@@ -15,7 +14,6 @@ import imgLogo from '../../images/sumai_logo_blue.png';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -24,6 +22,7 @@ import AccountManagementMenu from './AccountManagementMenu';
 import Menu from './Menu'
 
 import * as root from '../../rootValue';
+import ColController from './ColController';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,7 +86,7 @@ export default function Header(props) {
   const md = useMediaQuery(theme.breakpoints.up('md'));
   const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn);
 
-  const { open, setOpen } = props
+  const { colCount, setColCount, open, setOpen } = props
 
   const loginButton = (
     <Button onClick={() => window.location.assign("https://sumai.co.kr/login?url="+window.location.href)} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
@@ -132,6 +131,7 @@ export default function Header(props) {
           </a>
 
           <div style={{ flexGrow: 1 }} />
+          <ColController colCount={colCount} setColCount={setColCount}/>
 
           {w_365? <Menu/> : <div style={{marginLeft: '10px'}}/>}
 

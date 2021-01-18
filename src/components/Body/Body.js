@@ -166,9 +166,10 @@ export default function Body(props) {
     <Box className={classes.root}>
       <Box display="flex" width="100vw">
         {['', '', '', ''].slice(0, viewCount).map((t, k) => ( 
-          <Grid container direction="column" style={{height:"auto"}} key={k}>
+          // 창 크기가 lg이고, viewCount가 1일 경우 margin-left는 150px, max-width는 1000px
+          <Grid container direction="column" style={{height:"auto", marginLeft:lg&&viewCount===1? '150px': 0, maxWidth:lg&&viewCount===1? '1000px': 'none'}} key={k}>
             {newsData.filter((x, idx) => idx%viewCount===k).map((tile, key) => (
-              <Grid item key={key} className={classes.gridContents} style={{padding: "none", maxWidth:"1000px"}}>
+              <Grid item key={key} className={classes.gridContents} style={{padding: "none"}}>
                 <Contents news={tile} currentId={currentId}/>
               </Grid>
             ))}

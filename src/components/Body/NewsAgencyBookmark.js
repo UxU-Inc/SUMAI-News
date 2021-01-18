@@ -6,6 +6,7 @@ import tileData from './tileData';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 import * as NewsAgencyInfo from './NewsAgencyInfo'
 
@@ -53,11 +54,8 @@ function news_agency_bookmark_true() {
 
 function news_agency_bookmark_false() {
   const allNeswAgency = Object.keys(NewsAgencyInfo.list).map((agency) => agency);
-  console.log(allNeswAgency);
   const bookmark_true = news_agency_bookmark_true();
-  console.log(bookmark_true);
   const bookmark_false = allNeswAgency.filter(x => !bookmark_true.includes(x)); // 차집합
-  console.log(bookmark_false);
   return bookmark_false;
 }
 
@@ -67,10 +65,13 @@ export default function NewsAgencyBookmark() {
   
   return (
     <Box className={classes.root}>
-      <Typography style={{marginBottom: '10px'}}>
-        즐겨찾기한 언론사
-      </Typography>
-
+      <Box display='flex'>
+        <BookmarkIcon color='primary' style={{marginRight: '5px'}}/>
+        <Typography style={{marginBottom: '10px'}}>
+          즐겨찾기한 언론사
+        </Typography>
+      </Box>
+      
       <Box className={classes.grid} style={{marginBottom: '50px'}}>
         <GridList cellHeight={50} className={classes.gridList} cols={6}>
           {tileData.map((tile) => (
@@ -83,10 +84,13 @@ export default function NewsAgencyBookmark() {
         </GridList>
       </Box>
       
-      
-      <Typography style={{marginBottom: '10px'}}>
+
+      <Box display='flex'>
+        <BookmarkIcon style={{ color: 'rgb(0, 0, 0, 0.54)', marginRight: '5px' }}/>
+        <Typography style={{marginBottom: '10px'}}>
         즐겨찾기 하지 않은 언론사
-      </Typography>
+        </Typography>
+      </Box>
 
       <Box className={classes.grid}>
         <GridList cellHeight={50} className={classes.gridList} cols={6}>

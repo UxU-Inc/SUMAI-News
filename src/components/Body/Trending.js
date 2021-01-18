@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import Skeleton from '@material-ui/lab/Skeleton';
 
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 import Contents from './Contents';
-import { NativeSelect } from '@material-ui/core';
-import contentSetting from './../../reducers/contentSetting';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,75 +54,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Body(props) {
+export default function Trending(props) {
   const { colsCount, lg } = props
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [loading, setLoading] = useState(false)
-  const [isAllLoad, setIsAllLoad] = useState(false)
-  const [hideSkel, setHideSkel] = useState([])
   const currentId = useSelector(store => store.authentication.status.currentId)
 
-  const itemRef = useRef([])
-
-  const NewsMain = useCallback((idx, cnt) => {
+  const Trending = useCallback((cnt) => {
     const id = currentId
-    axios.post('http://localhost:3306/api/news/lastest', { id, idx, cnt })   //링크 바꿔야됨
+    axios.post('http://localhost:3306/api/news/trending', { id, cnt })   //링크 바꿔야됨
     .then((response) => {
-      setNewsData(newsData.concat(response.data))
-      if(response.data.length < cnt) {
-        setIsAllLoad(true)
-      }
-      setLoading(false)
+      setNewsData(response.data)
     }).catch((error) => {
 
     })
-  }, [newsData, currentId])
-
-  const handleSkeleton = useCallback(() => {
-    let arr = [], temp = []
-    let sum = 0
-    for(let i=0; i<colsCount; i++) {
-      arr[i] = itemRef.current[i].offsetTop
-      sum += arr[i]
-    }
-    sum /= colsCount
-    arr.forEach((el, i) => {
-      if(arr[i] - sum > 200) temp[i] = true
-    })
-    setHideSkel(temp)
-  }, [colsCount]);
-
-  const handleScroll = useCallback(() => {
-    const { innerHeight } = window;
-    const { scrollHeight } = document.body;
-    // IE에서는 document.documentElement 를 사용.
-    const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
-    
-    if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 250 && !loading && !isAllLoad) {
-      setLoading(true)
-      NewsMain(newsData[newsData.length-1].idx-1, colsCount===1? 12:24)
-      console.log(newsData[newsData.length-1].idx-1)
-    }
-  }, [loading, newsData, colsCount, NewsMain, isAllLoad]);
+  }, [currentId])
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
-  useEffect(() => {
-    handleSkeleton()
-    let idx = null 
-    if(newsData[newsData.length-1]) idx = newsData[newsData.length-1].idx-1;
-    else idx = -1;
-
-    if(!isAllLoad && !loading && newsData.length < (colsCount===1? 12:24)) {
+    if(!loading) {
       setLoading(true)
-      NewsMain(idx, colsCount===1? 12:24)  
+      Trending(48)  
     }
-
-  }, [colsCount, NewsMain, newsData, handleSkeleton, isAllLoad, loading]);
+  }, [loading, Trending]);
 
   return (
     <Box className={classes.root}>
@@ -138,10 +89,6 @@ export default function Body(props) {
                 <Contents news={tile} currentId={currentId}/>
               </Grid>
             ))}
-            <Grid style={newsData.length === 0? {display:"none"}:{padding: "10px"}} ref={(el) => itemRef.current[k] = el}>
-              {!isAllLoad && !hideSkel[k]? <><Skeleton variant="text" height={100} />
-              <Skeleton variant="rect" height={300} /></>:null}
-            </Grid>
           </Grid>
         ))}
       </Box>

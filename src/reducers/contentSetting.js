@@ -23,7 +23,7 @@ export default function contentSetting(state = initialState, action) {
     case CONTENT_COLUMNS:
       return {
         ...state,
-        columns: action.columns,
+        columns: Number(action.columns), // 쿠키 임의 변경시 NaN 에러 발생 가능
       }
     default:
       return {

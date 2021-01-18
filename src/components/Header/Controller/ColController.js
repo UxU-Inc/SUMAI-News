@@ -51,7 +51,7 @@ export function getColumns(dispatch) {
   let columns = getCookie('columns');
 
   if (typeof columns === "string") {
-    dispatch(setColumns(Number(columns))) // 쿠키를 임의로 변경시 NaN 에러 발생 가능
+    dispatch(setColumns(columns))
   };
 }
 

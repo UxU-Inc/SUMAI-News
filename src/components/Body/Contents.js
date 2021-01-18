@@ -124,7 +124,7 @@ export default function RecipeReviewCard(props) {
         title={
           <Box display="flex" alignItems="center" >
             <Box onClick={() => window.open(NewsAgencyInfo.list[news_agency]?.url)} className={classes.imgBox}>
-              <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} />
+              <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} onError={e => e.target.style.display='none'} />
             </Box>
             <div style={{ flexGrow: 1 }} />
             <IconButton style={{ padding: "5px" }} onClick={() => like()}>

@@ -1,8 +1,10 @@
 const CONTENT_FONT = "CONTENT_FONT"
+const CONTENT_FONT_SIZE = "CONTENT_FONT_SIZE"
 const CONTENT_COLUMNS = "CONTENT_COLUMNS"
 
 const initialState = {
   font: '',
+  fontSize: 14,
   columns: 4,
 };
 
@@ -13,10 +15,15 @@ export default function contentSetting(state = initialState, action) {
         ...state,
         font: action.font,
       }
+      case CONTENT_FONT_SIZE:
+        return {
+          ...state,
+          fontSize: action.fontSize,
+        }
     case CONTENT_COLUMNS:
       return {
         ...state,
-        columns: action.columns,
+        columns: Number(action.columns), // 쿠키 임의 변경시 NaN 에러 발생 가능
       }
     default:
       return {
@@ -31,6 +38,12 @@ const setFont = (font) => {
     font: font,
   }
 }
+const setFontSize = (size) => {
+  return {
+    type: CONTENT_FONT_SIZE,
+    fontSize: size,
+  }
+}
 
 const setColumns = (columns) => {
   return {
@@ -41,5 +54,6 @@ const setColumns = (columns) => {
 
 export {
   setFont,
+  setFontSize,
   setColumns,
 }

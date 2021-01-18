@@ -13,6 +13,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import * as NewsAgencyInfo from './NewsAgencyInfo'
+import { useSelector } from 'react-redux';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,6 +79,7 @@ export default function RecipeReviewCard(props) {
   const { idx, title, url, news_agency, summary, liked_ } = news;
   const [liked, setIiked] = useState(false)
   const [loginError, setLoginError] = useState(false)
+  const summaryFontSize = useSelector(store => store.contentSetting.fontSize)
 
   useEffect(() => {
     setIiked(!!liked_)
@@ -96,9 +98,6 @@ export default function RecipeReviewCard(props) {
     } else {
       setLoginError(true)
     }
-  }
-  const changeFontSize = () => {
-    return classes.font2
   }
 
   const click = () => {
@@ -125,7 +124,7 @@ export default function RecipeReviewCard(props) {
         title={
           <Box display="flex" alignItems="center" >
             <Box onClick={() => window.open(NewsAgencyInfo.list[news_agency]?.url)} className={classes.imgBox}>
-              <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} />
+              <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} onError={e => e.target.style.display='none'} />
             </Box>
             <div style={{ flexGrow: 1 }} />
             <IconButton style={{ padding: "5px" }} onClick={() => like()}>
@@ -150,7 +149,7 @@ export default function RecipeReviewCard(props) {
       </CardHeader>
         {/* <Typography color="textSecondary" component="p" style={{fontFamily: "NotoSansKR-Light", whiteSpace: "pre-wrap"}}> */}
       <CardContent onClick={() => window.open(url)} style={{textDecoration: 'none', cursor:'pointer'}}>
-        <Typography className={changeFontSize()} variant="body2" color="textSecondary" component="p" style={{pointerEvents: "none", userSelect: "none"}}>
+        <Typography variant="body2" color="textSecondary" component="p" style={{pointerEvents: "none", userSelect: "none", fontSize: summaryFontSize+"px"}}>
           {summary}
         </Typography>
       </CardContent>

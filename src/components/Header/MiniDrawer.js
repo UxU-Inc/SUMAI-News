@@ -54,6 +54,17 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
   },
   drawerOpen: {
+    '&::-webkit-scrollbar': {
+      width: '0.15em'
+    },
+    '&::-webkit-scrollbar-track': {
+      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+      '-webkitBoxShadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.2)',
+      outline: '1px solid slategrey'
+    },
     overflowX: 'hidden',
     border: '0px',
     width: drawerWidth,
@@ -63,6 +74,17 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   drawerClose: {
+    '&::-webkit-scrollbar': {
+      width: '0.15em'
+    },
+    '&::-webkit-scrollbar-track': {
+      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+      '-webkitBoxShadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.2)',
+      outline: '1px solid slategrey'
+    },
     border: '0px',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,

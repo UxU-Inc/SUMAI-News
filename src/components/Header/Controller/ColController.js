@@ -13,10 +13,10 @@ const BootstrapInput = withStyles((theme) => ({
     },
   },
   input: {
-    borderRadius: 4,
+    borderRadius: 100,
     position: 'relative',
     backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
+    border: '2px solid #eee',
     fontSize: 16,
     padding: '5px 26px 5px 12px',
     transition: theme.transitions.create(['border-color', 'box-shadow']),
@@ -35,34 +35,30 @@ const BootstrapInput = withStyles((theme) => ({
     ].join(','),
     '&:focus': {
       borderRadius: 4,
-      borderColor: '#80bdff',
+      borderColor: '#eee',
       boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
     },
   },
 }))(InputBase);
 
+export function getColumns(dispatch) {
+  const getCookie = (name) => {
+    const value = "; " + document.cookie;
+    const parts = value.split("; " + name + "=");
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+
+  let columns = getCookie('columns');
+
+  if (typeof columns === "string") {
+    dispatch(setColumns(columns))
+  };
+}
+
 export default function ColController(props) {
   const store = useSelector(store => store)
   const columns = useSelector(store => store.contentSetting.columns)
   const dispatch = useDispatch()
-
-  useEffect(() => { // 쿠키 읽기
-    const getCookie = (name) => {
-      const value = "; " + document.cookie;
-      const parts = value.split("; " + name + "=");
-      if (parts.length === 2) return parts.pop().split(";").shift();
-    }
-
-    let columns = getCookie('columns');
-
-    if (typeof columns === "string") {
-      dispatch(setColumns(Number(columns))) // 쿠키를 임의로 변경시 NaN 에러 발생 가능
-    };
-  }, [dispatch])
-
-  useEffect(() => {
-    console.log(store)
-  }, [store])
 
   const onColCount = (event) => {
     const col=event.target.value

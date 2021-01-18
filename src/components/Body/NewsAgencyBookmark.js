@@ -6,6 +6,7 @@ import tileData from './tileData';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
 
 import * as NewsAgencyInfo from './NewsAgencyInfo'
 
@@ -20,17 +21,22 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
-    borderLeft: '1px solid rgb(210, 210, 210)',
-    borderTop: '1px solid rgb(210, 210, 210)',
-    borderBottom: '1px solid rgb(210, 210, 210)',
   },
   gridList: {
-    width: "100%",
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    borderTop: '1px solid rgb(210, 210, 210)',
+    borderLeft: '1px solid rgb(210, 210, 210)',
     backgroundColor: '#ffffff',
   },
   gridListTile: {
-    borderRight: '1px solid rgb(210, 210, 210)',
+    flex: '1 0 20%',
+    
+    // borderTop: '1px solid rgb(210, 210, 210)',
+    // borderLeft: '1px solid rgb(210, 210, 210)',
     borderBottom: '1px solid rgb(210, 210, 210)',
+    borderRight: '1px solid rgb(210, 210, 210)',
   },
   button: {
     width: '100%',
@@ -47,23 +53,54 @@ function news_agency_logo(news_agency) {
   return '/images/news_agency/' + news_agency + '.png';
 }
 
-function news_agency_bookmark_true() {
-  return tileData.map((agency) => agency.news_agency);
+async function requestBookmark() {
+  return axios('/api/bookmark/').then((data) => {
+    return data.data
+  }).catch((err) => {
+    // 실패
+  })
 }
 
-function news_agency_bookmark_false() {
-  const allNeswAgency = Object.keys(NewsAgencyInfo.list).map((agency) => agency);
-  console.log(allNeswAgency);
-  const bookmark_true = news_agency_bookmark_true();
-  console.log(bookmark_true);
-  const bookmark_false = allNeswAgency.filter(x => !bookmark_true.includes(x)); // 차집합
-  console.log(bookmark_false);
-  return bookmark_false;
+function useBookmark() {
+  const [allNewsAgency, setAllNewsAgency] = React.useState(Object.keys(NewsAgencyInfo.list).map((agency) => agency));
+  const [bookmark, setBookmark] = React.useState([])
+  const nonBookmark = allNewsAgency.filter(x => !bookmark.includes(x))
+
+  React.useEffect(() => {
+    requestBookmark().then((data) => {
+      setBookmark(data)
+    })
+
+  },[])
+
+  const changeBookmark = (event, bool) => {
+    console.log(event.target.alt)
+    if(typeof(event.target.alt) !== "undefined") {
+      if(bool === true) {
+        axios.post('/api/bookmark/add', {bookmark: event.target.alt}).then(() => {
+          setBookmark([...bookmark, event.target.alt]) // 추가
+        })
+      } else {
+        axios.post('/api/bookmark/delete', {bookmark: event.target.alt}).then(() => {
+          bookmark.splice(bookmark.indexOf(event.target.alt),1)
+          setBookmark([...bookmark])
+        })
+      }
+    }
+    // axios.post('',).then((res) => {
+    //   setBookmark()
+    //   // 성공
+    // }).catch((err) => {
+    //   // 실패
+    // })
+  }
+
+  return [bookmark, nonBookmark, changeBookmark]
 }
 
 export default function NewsAgencyBookmark() {
   const classes = useStyles();
-  news_agency_bookmark_false();
+  const [bookmark, nonBookmark, changeBookmark] = useBookmark()
   
   return (
     <Box className={classes.root}>
@@ -72,15 +109,20 @@ export default function NewsAgencyBookmark() {
       </Typography>
 
       <Box className={classes.grid} style={{marginBottom: '50px'}}>
-        <GridList cellHeight={50} className={classes.gridList} cols={6}>
-          {tileData.map((tile) => (
-            <GridListTile key={tile.img} cols={tile.cols || 1} className={classes.gridListTile} style={{padding: '0px'}}>
-              <Button className={classes.button} stlye={{padding: '0px'}}>
-                <img src={news_agency_logo(tile.news_agency)} alt={tile.title} className={classes.imgLogo} />
+        <Box className={classes.gridList} >
+          {bookmark.map((newsAgency) => (
+            <Box key={newsAgency} className={classes.gridListTile}>
+              <Button className={classes.button} stlye={{padding: '0px'}} onClick={(event) => changeBookmark(event, false)}>
+                <img src={news_agency_logo(newsAgency)} alt={newsAgency} className={classes.imgLogo}/>
               </Button>
-            </GridListTile>
+            </Box>
           ))}
-        </GridList>
+          {Array.from({length: nonBookmark.length % 5, undefined}).map(() => {
+            return(
+              <Box className={classes.gridListTile} />
+            )
+          })}
+        </Box>
       </Box>
       
       
@@ -89,15 +131,20 @@ export default function NewsAgencyBookmark() {
       </Typography>
 
       <Box className={classes.grid}>
-        <GridList cellHeight={50} className={classes.gridList} cols={6}>
-          {news_agency_bookmark_false().map((newsAgency) => (
-            <GridListTile key={newsAgency} cols={1} className={classes.gridListTile} style={{padding: '0px'}}>
-              <Button className={classes.button} stlye={{padding: '0px'}}>
-                <img src={news_agency_logo(newsAgency)} alt={newsAgency} className={classes.imgLogo} />
+        <Box className={classes.gridList} >
+          {nonBookmark.map((newsAgency) => (
+            <Box key={newsAgency} className={classes.gridListTile}>
+              <Button className={classes.button} stlye={{padding: '0px'}} onClick={(event) => changeBookmark(event, true)}>
+                <img src={news_agency_logo(newsAgency)} alt={newsAgency} className={classes.imgLogo}/>
               </Button>
-            </GridListTile>
+            </Box>
           ))}
-        </GridList>
+          {Array.from({length: bookmark.length % 5, undefined}).map(() => {
+            return(
+              <Box className={classes.gridListTile} />
+            )
+          })}
+        </Box>
       </Box>
     </Box>
   )

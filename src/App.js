@@ -9,6 +9,7 @@ import { useTheme } from '@material-ui/core/styles';
 import Body from './components/Body/Body';
 import Like from './components/Body/Like';
 import History from './components/Body/History';
+import Trending from './components/Body/Trending';
 import NewsAgencyBookmark from './components/Body/NewsAgencyBookmark';
 
 
@@ -84,7 +85,7 @@ function App() {
           <Main {...props} Body={Body}/>
         )} />
         <Route exact path="/trending" render={(props) => (
-          <Main {...props} Body={Body}/>
+          <Main {...props} Body={Trending}/>
         )} />
         <Route exact path="/history" render={(props) => (
           <Main {...props} Body={History}/>

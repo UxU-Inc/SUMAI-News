@@ -117,11 +117,11 @@ export default function Like(props) {
     if(newsData[newsData.length-1]) requestTime = newsData[newsData.length-1].requestTime;
     else requestTime = -1;
 
-    if(!isAllLoad && newsData.length < (colsCount===1? 12:24)) {
+    if(!isAllLoad && !loading && newsData.length < (colsCount===1? 12:24)) {
       setLoading(true)
       LikedNews(requestTime, colsCount===1? 12:24)
     }
-  }, [colsCount, LikedNews, newsData, handleSkeleton, isAllLoad]);
+  }, [colsCount, LikedNews, newsData, handleSkeleton, isAllLoad, loading]);
   
   return(
     <Box className={classes.root}>

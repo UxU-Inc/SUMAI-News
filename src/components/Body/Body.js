@@ -120,12 +120,12 @@ export default function Body(props) {
     if(newsData[newsData.length-1]) idx = newsData[newsData.length-1].idx-1;
     else idx = -1;
 
-    if(!isAllLoad && newsData.length < (colsCount===1? 12:24)) {
+    if(!isAllLoad && !loading && newsData.length < (colsCount===1? 12:24)) {
       setLoading(true)
       NewsMain(idx, colsCount===1? 12:24)  
     }
 
-  }, [colsCount, NewsMain, newsData, handleSkeleton, isAllLoad]);
+  }, [colsCount, NewsMain, newsData, handleSkeleton, isAllLoad, loading]);
 
   return (
     <Box className={classes.root}>

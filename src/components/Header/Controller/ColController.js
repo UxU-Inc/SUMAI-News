@@ -41,24 +41,24 @@ const BootstrapInput = withStyles((theme) => ({
   },
 }))(InputBase);
 
+export function getColumns(dispatch) {
+  const getCookie = (name) => {
+    const value = "; " + document.cookie;
+    const parts = value.split("; " + name + "=");
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+
+  let columns = getCookie('columns');
+
+  if (typeof columns === "string") {
+    dispatch(setColumns(Number(columns))) // 쿠키를 임의로 변경시 NaN 에러 발생 가능
+  };
+}
+
 export default function ColController(props) {
   const store = useSelector(store => store)
   const columns = useSelector(store => store.contentSetting.columns)
   const dispatch = useDispatch()
-
-  useEffect(() => { // 쿠키 읽기
-    const getCookie = (name) => {
-      const value = "; " + document.cookie;
-      const parts = value.split("; " + name + "=");
-      if (parts.length === 2) return parts.pop().split(";").shift();
-    }
-
-    let columns = getCookie('columns');
-
-    if (typeof columns === "string") {
-      dispatch(setColumns(Number(columns))) // 쿠키를 임의로 변경시 NaN 에러 발생 가능
-    };
-  }, [dispatch])
 
   const onColCount = (event) => {
     const col=event.target.value

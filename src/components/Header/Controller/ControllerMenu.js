@@ -1,10 +1,11 @@
 import { Box, IconButton, Grid, Grow, MenuList, Popper, Paper } from "@material-ui/core";
 import SettingsIcon from '@material-ui/icons/Settings';
-import ColController from './ColController';
+import ColController, {getColumns} from './ColController';
 import FontController from "./FontController";
 import { makeStyles } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { useRef, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,12 @@ export default function ControllerMenu() {
   const classes = useStyles()
   const anchorRef = useRef(null)
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch()
+
+  // 쿠키에서 columns를 읽어오는 함수
+  useEffect(() => {
+    getColumns(dispatch)
+  }, [dispatch])
 
   function handleListKeyDown(event) {
     if (event.key === 'Tab') {

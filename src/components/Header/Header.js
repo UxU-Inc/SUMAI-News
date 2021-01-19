@@ -79,7 +79,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Header(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const xsm = useMediaQuery(theme.breakpoints.up('xsm'));
   const w_365 = useMediaQuery(theme.breakpoints.up(365));
   const w_420 = useMediaQuery(theme.breakpoints.up(420));
   const w_480 = useMediaQuery(theme.breakpoints.up(480));

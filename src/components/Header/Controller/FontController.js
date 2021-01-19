@@ -1,5 +1,5 @@
 
-import { IconButton, FormControl, NativeSelect } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFontSize } from 'reducers/contentSetting';
 import Box from '@material-ui/core/Box';

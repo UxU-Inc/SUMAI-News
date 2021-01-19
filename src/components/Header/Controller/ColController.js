@@ -1,7 +1,6 @@
 
-import { Box, FormControl, InputBase, NativeSelect, InputLabel } from '@material-ui/core';
+import { Box, FormControl, InputBase, NativeSelect } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setColumns } from 'reducers/contentSetting';
 
@@ -56,7 +55,6 @@ export function getColumns(dispatch) {
 }
 
 export default function ColController(props) {
-  const store = useSelector(store => store)
   const columns = useSelector(store => store.contentSetting.columns)
   const dispatch = useDispatch()
 

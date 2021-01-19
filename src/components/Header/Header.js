@@ -79,11 +79,9 @@ const useStyles = makeStyles((theme) => ({
 export default function Header(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const xsm = useMediaQuery(theme.breakpoints.up('xsm'));
   const w_365 = useMediaQuery(theme.breakpoints.up(365));
   const w_405 = useMediaQuery(theme.breakpoints.up(405));
   const w_420 = useMediaQuery(theme.breakpoints.up(420));
-  const sm = useMediaQuery(theme.breakpoints.up('sm'));
   const md = useMediaQuery(theme.breakpoints.up('md'));
   const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn);
 

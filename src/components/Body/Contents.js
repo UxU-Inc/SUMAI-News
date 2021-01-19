@@ -5,7 +5,6 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';

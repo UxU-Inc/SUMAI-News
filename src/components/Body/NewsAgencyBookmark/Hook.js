@@ -56,7 +56,7 @@ function requestBookmark() {
 }
 
 function useBookmark() {
-  const [allNewsAgency, setAllNewsAgency] = React.useState(Object.keys(NewsAgencyInfo.list).map((agency) => agency));
+  const allNewsAgency = Object.keys(NewsAgencyInfo.list).map((agency) => agency);
   const [bookmark, setBookmark] = React.useState([])
   const nonBookmark = allNewsAgency.filter(x => !bookmark.includes(x))
   const [loading, setLoading] = React.useState(false)

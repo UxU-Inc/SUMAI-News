@@ -190,12 +190,11 @@ function ListItemCreater(props) {
 
 export default function MiniDrawer(props) {
   const theme = useTheme();
-  const xsm = useMediaQuery(theme.breakpoints.up('xsm'));
   const sm = useMediaQuery(theme.breakpoints.up('sm'));
   const classes = useStyles();
   const history = useHistory();
 
-  const { open, setOpen } = props
+  const { open } = props
 
   const [dialogOpen, setDialogOpen] = React.useState(false)
 

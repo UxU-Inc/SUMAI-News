@@ -1,4 +1,4 @@
-import { Box, IconButton, Grid, Grow, MenuList, Popper, Paper } from "@material-ui/core";
+import { Box, IconButton, Grow, MenuList, Popper, Paper } from "@material-ui/core";
 import SettingsIcon from '@material-ui/icons/Settings';
 import ColController, {getColumns} from './ColController';
 import FontController from "./FontController";

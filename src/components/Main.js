@@ -51,7 +51,6 @@ export default function Main(props) {
 
   
   useEffect(() => { //컴포넌트 렌더링이 맨 처음 완료된 이후에 바로 세션확인
-    console.log('act')
     // 쿠키 차단 설정 시 자동 로그아웃
     if (!navigator.cookieEnabled && isLoggedIn) {
       history.push("/")
@@ -62,7 +61,6 @@ export default function Main(props) {
             isLoggedIn: false,
             email: ''
           };
-          console.log('logout?')
           // document.cookie = 'key=' + btoa(JSON.stringify(loginData)) + ';path=/;'; // local에서 테스트 하기 위해 주석 처리
         }
       );
@@ -115,7 +113,7 @@ export default function Main(props) {
       <Header open={open} setOpen={setOpen}/>
       
       <Box style={{display: 'flex'}}>
-        <MiniDrawer open={open} setOpen={setOpen} />
+        <MiniDrawer open={open} />
         <Body colsCount={colsCount} lg={lg}/>
       </Box>
 

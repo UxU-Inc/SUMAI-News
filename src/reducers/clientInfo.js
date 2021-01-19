@@ -77,7 +77,7 @@ function ClientInfoComponent() {
   // const signupInfo = useSelector(state => state.authentication.signup)
   const clientInfoLoading = useSelector(state => state.clientInfo.loading)
   const location = useLocation()
-  const dispatch = React.useCallback(useDispatch(), [])
+  const dispatch = useDispatch()
   
 
   const RecordLog = (act) => {

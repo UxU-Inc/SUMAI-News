@@ -14,15 +14,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // import emailjs from 'emailjs-com';
 import { onLogout } from './../../functions/logout';
 import { useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
 
 
 export default function AccountManagementMenu() {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
     const currentUser = useSelector(store => store.authentication.status.currentUser)
-    const history = useHistory()
-    const location = useLocation()
 
     const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);

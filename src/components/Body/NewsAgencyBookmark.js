@@ -75,7 +75,6 @@ function useBookmark() {
   },[])
 
   const changeBookmark = (event, bool) => {
-    console.log(event.target.alt)
     if(typeof(event.target.alt) !== "undefined") {
       if(bool === true) {
         axios.post('/api/bookmark/add', {bookmark: event.target.alt}).then(() => {

@@ -8,8 +8,6 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 import Contents from './Contents';
-import { NativeSelect } from '@material-ui/core';
-import contentSetting from './../../reducers/contentSetting';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -105,7 +103,7 @@ export default function Body(props) {
     if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 250 && !loading && !isAllLoad) {
       setLoading(true)
       NewsMain(newsData[newsData.length-1].idx-1, colsCount===1? 12:24)
-      console.log(newsData[newsData.length-1].idx-1)
+      // console.log(newsData[newsData.length-1].idx-1)
     }
   }, [loading, newsData, colsCount, NewsMain, isAllLoad]);
 

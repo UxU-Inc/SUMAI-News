@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import './Header.css';
@@ -136,6 +136,11 @@ const useStyles = makeStyles((theme) => ({
 function LoginChecker(props) {
   const [open, setOpen] = React.useState(false)
   const isLoggedIn = useSelector(store => store.authentication.status.isLoggedIn)
+  const location = useLocation()
+
+  React.useEffect(() => {
+    setOpen(false)
+  }, [location])
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {

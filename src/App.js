@@ -9,7 +9,7 @@ import { useTheme } from '@material-ui/core/styles';
 import Body from './components/Body/Body';
 import Like from './components/Body/Like';
 import History from './components/Body/History';
-import NewsAgencyBookmark from './components/Body/NewsAgencyBookmark';
+import NewsAgencyBookmark from './components/Body/NewsAgencyBookmark/index';
 
 
 function App() {

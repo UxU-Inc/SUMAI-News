@@ -106,7 +106,8 @@ export default function Main(props) {
         }
       }
     )
-  }, [dispatch, history, isLoggedIn, location])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]) // 다른 훅을 읽음으로써 getInfo를 여러번 할 수 있기에 location만으로 제한
 
   return(
     <Box>

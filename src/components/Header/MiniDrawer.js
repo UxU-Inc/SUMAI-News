@@ -20,6 +20,9 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import MailIcon from '@material-ui/icons/Mail';
 import FeedbackDialog from './FeedbackDialog';
+import { useSelector } from 'react-redux';
+import { Snackbar } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 const drawerWidth = 240;
 
@@ -129,12 +132,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+
+function LoginChecker(props) {
+  const [open, setOpen] = React.useState(false)
+  const isLoggedIn = useSelector(store => store.authentication.status.isLoggedIn)
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    
+    setOpen(false);
+  }
+
+  const checkLogin = React.useCallback(() => {
+    if(!isLoggedIn) setOpen(true)
+
+    return isLoggedIn
+  }, [isLoggedIn])
+
+  const component = () => {
+    return(
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" variant='filled'>
+          로그인이 필요한 서비스입니다.
+        </Alert>
+      </Snackbar>
+    )
+  }
+  
+  return [checkLogin, component]
+}
+
 function ListItemCreater(props) {
-  const {url, primary, history, Icon, sm, classes} = props
+  const {url, primary, history, Icon, sm, classes, login, checkLogin} = props
 
   const backgoroundColor = window.location.pathname === url ? '#e6e6e6' : '#fff'
   const iconButtonColor = window.location.pathname === url ? 'primary' : 'inherit'
-  const Link = () => {window.location.pathname === url ? window.location.reload() : history.push(url)}
+  const Link = () => {
+    if(!login || checkLogin()) 
+      window.location.pathname === url ? window.location.reload() : history.push(url)
+  }
 
   return (
     <ListItem button style={{ padding: sm ? '20px' : '20px 20px 20px 13.5px', backgroundColor: backgoroundColor}} onClick={Link}>
@@ -156,6 +194,8 @@ export default function MiniDrawer(props) {
 
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
+  const [checkLogin, CheckSnackbar] = LoginChecker()
+
   return (
     <Box>
       <Drawer
@@ -175,14 +215,14 @@ export default function MiniDrawer(props) {
         <div className={classes.toolbar} />
 
         <List className="MenuList">
-          <ListItemCreater sm={sm} classes={classes} Icon={HomeIcon} url={'/'} primary={"홈"} history={history}/>
-          <ListItemCreater sm={sm} classes={classes} Icon={WhatshotIcon} url={'/trending'} primary={"인기"} history={history}/>
-          <ListItemCreater sm={sm} classes={classes} Icon={HistoryIcon} url={'/history'} primary={"열람 기록"} history={history}/>
-          <ListItemCreater sm={sm} classes={classes} Icon={ThumbUpIcon} url={'/like'} primary={"좋아요 표시한 문서"} history={history}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={HomeIcon} url={'/'} primary={"홈"} history={history} checkLogin={checkLogin}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={WhatshotIcon} url={'/trending'} primary={"인기"} history={history} checkLogin={checkLogin}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={HistoryIcon} url={'/history'} primary={"열람 기록"} history={history} checkLogin={checkLogin} login={true}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={ThumbUpIcon} url={'/like'} primary={"좋아요 표시한 문서"} history={history} checkLogin={checkLogin} login={true}/>
         </List>
         <Divider />
         <List>
-          <ListItemCreater sm={sm} classes={classes} Icon={BookmarkIcon} url={'/newsAgencyBookmark'} primary={"뉴스사 즐겨찾기"} history={history}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={BookmarkIcon} url={'/newsAgencyBookmark'} primary={"뉴스사 즐겨찾기"} history={history} checkLogin={checkLogin} login={true}/>
         </List>
         <Divider />
         <List>
@@ -193,6 +233,7 @@ export default function MiniDrawer(props) {
         </List>
       </Drawer>
       <FeedbackDialog open={dialogOpen} setOpen={setDialogOpen} />
+      <CheckSnackbar />
     </Box>
   )
 }

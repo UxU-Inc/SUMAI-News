@@ -6,6 +6,9 @@ import * as NewsAgencyInfo from '../NewsAgencyInfo'
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: '20px 30px',
+    '@media (max-width: 600px) and (min-width: 0px)': {
+      margin: '0px',
+    },
   },
   grid: {
     display: 'flex',

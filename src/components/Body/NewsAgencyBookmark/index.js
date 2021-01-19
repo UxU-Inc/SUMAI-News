@@ -3,9 +3,10 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { Backdrop, CircularProgress } from '@material-ui/core';
+import { Backdrop, CircularProgress, Paper } from '@material-ui/core';
 import { useStyles, useBookmark, useItemCount } from './Hook';
 import Dialog from '@material-ui/core/Dialog';
+import { useSelector } from 'react-redux';
 
 
 function news_agency_logo(news_agency) {

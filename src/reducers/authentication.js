@@ -14,7 +14,7 @@ const initialState = {
         loaded: false,
         valid: false,
         isLoggedIn: false,
-        currentId: '',
+        currentId: '-1',
         currentEmail: '',
         currentUser: '',
     }
@@ -82,7 +82,7 @@ export default function authentication(state = initialState, action) {
       return {
         ...state,
         status: {
-          ...state.staus,
+          ...state.status,
           isLoggedIn: true
         }
       }
@@ -119,7 +119,7 @@ export default function authentication(state = initialState, action) {
         status: {
           ...state.status,
           isLoggedIn: false,
-          currentId: '',
+          currentId: '-1',
           currentEmail: '',
           currentUser: ''
         }
@@ -129,7 +129,7 @@ export default function authentication(state = initialState, action) {
       return {
         ...state,
         status: {
-          ...state.staus,
+          ...state.status,
           isLoggedIn: true
         }
       }

@@ -72,11 +72,11 @@ export default function Trending(props) {
   }, [currentId])
 
   useEffect(() => {
-    if(!loading) {
+    if(!loading && currentId !== '-1') {
       setLoading(true)
       Trending(48)  
     }
-  }, [loading, Trending]);
+  }, [loading, Trending, currentId]);
 
   return (
     <Box className={classes.root}>

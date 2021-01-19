@@ -73,7 +73,7 @@ export default function Body(props) {
     axios.post('http://localhost:3306/api/news/lastest', { id, idx, cnt })   //링크 바꿔야됨
     .then((response) => {
       setNewsData(newsData.concat(response.data))
-      if(response.data.length < cnt) {
+      if(response.data.length < cnt || newsData.length >= 288) {
         setIsAllLoad(true)
       }
       setLoading(false)
@@ -102,7 +102,7 @@ export default function Body(props) {
     // IE에서는 document.documentElement 를 사용.
     const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
     
-    if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 250 && !loading && !isAllLoad) {
+    if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 300 && !loading && !isAllLoad) {
       setLoading(true)
       NewsMain(newsData[newsData.length-1].idx-1, colsCount===1? 12:24)
       console.log(newsData[newsData.length-1].idx-1)
@@ -116,16 +116,18 @@ export default function Body(props) {
 
   useEffect(() => {
     handleSkeleton()
-    let idx = null 
-    if(newsData[newsData.length-1]) idx = newsData[newsData.length-1].idx-1;
-    else idx = -1;
+  }, [handleSkeleton]);
 
-    if(!isAllLoad && !loading && newsData.length < (colsCount===1? 12:24)) {
+  useEffect(() => {
+    if(!isAllLoad && !loading && currentId !== '-1' && newsData.length < (colsCount===1? 12:24)) {
+      let idx = null 
+      if(newsData[newsData.length-1]) idx = newsData[newsData.length-1].idx-1;
+      else idx = -1;
       setLoading(true)
       NewsMain(idx, colsCount===1? 12:24)  
     }
 
-  }, [colsCount, NewsMain, newsData, handleSkeleton, isAllLoad, loading]);
+  }, [colsCount, NewsMain, newsData, isAllLoad, loading, currentId]);
 
   return (
     <Box className={classes.root}>

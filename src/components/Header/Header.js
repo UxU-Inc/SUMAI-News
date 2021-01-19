@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
@@ -20,6 +20,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountManagementMenu from './AccountManagementMenu';
 
 import Menu from './Menu'
+
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { AlertTitle } from '@material-ui/lab';
 
 import * as root from '../../rootValue';
 import ControllerMenu from './Controller/ControllerMenu';
@@ -76,6 +80,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export default function Header(props) {
   const classes = useStyles();
   const theme = useTheme();
@@ -85,6 +93,7 @@ export default function Header(props) {
   const sm = useMediaQuery(theme.breakpoints.up('sm'));
   const md = useMediaQuery(theme.breakpoints.up('md'));
   const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn);
+  const [snackOpen, setSnackOpen] = useState(true)
 
   const { open, setOpen } = props
 
@@ -101,6 +110,12 @@ export default function Header(props) {
       </Box>
     </Box>
   )
+  const snackBarHandleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackOpen(false)
+  }
   return (
     <Box className={classes.root}>
       <CssBaseline />
@@ -140,6 +155,17 @@ export default function Header(props) {
 
         </Toolbar>
       </AppBar>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={snackOpen}
+        autoHideDuration={5000}
+        onClose={snackBarHandleClose}
+      >
+        <Alert onClose={snackBarHandleClose} severity="warning">
+          <AlertTitle>잘못된 요약문이 생성될 수 있습니다. </AlertTitle> 
+          정확한 내용을 살펴보려면 원문 내용을 직접 읽어보세요.
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

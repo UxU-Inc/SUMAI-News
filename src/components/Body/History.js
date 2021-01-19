@@ -100,7 +100,7 @@ export default function History(props) {
     // IE에서는 document.documentElement 를 사용.
     const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
     
-    if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 250 && !loading && !isAllLoad) {
+    if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 300 && !loading && !isAllLoad) {
       setLoading(true)
       History(newsData[newsData.length-1].requestTime, colsCount===1? 12:24)
     }
@@ -113,19 +113,21 @@ export default function History(props) {
 
   useEffect(() => {
     handleSkeleton()
-    let requestTime = null
-    if(newsData[newsData.length-1]) requestTime = newsData[newsData.length-1].requestTime;
-    else requestTime = -1;
+  }, [handleSkeleton]);
 
-    if(!isAllLoad && !loading && newsData.length < (colsCount===1? 12:24)) {
+  useEffect(() => {
+    if(!isAllLoad && !loading && currentId !== '-1' && newsData.length < (colsCount===1? 12:24)) {
+      let requestTime = null
+      if(newsData[newsData.length-1]) requestTime = newsData[newsData.length-1].requestTime;
+      else requestTime = -1;
       setLoading(true)
       History(requestTime, colsCount===1? 12:24)
     }
-  }, [colsCount, History, newsData, handleSkeleton, isAllLoad, loading]);
+  }, [colsCount, History, newsData, isAllLoad, loading, currentId]);
   
   return(
     <Box className={classes.root}>
-      {newsData.length === 0? <Box>열람한 뉴스가 없습니다.</Box>:null}
+      {newsData.length === 0 && !loading && currentId !== '-1'? <Box>열람한 뉴스가 없습니다.</Box>:null}
       <Box display="flex" width="100vw">
         {['', '', '', ''].slice(0, colsCount).map((t, k) => ( 
           // 창 크기가 lg이고, colsCount가 1일 경우 margin-left는 150px, max-width는 1000px

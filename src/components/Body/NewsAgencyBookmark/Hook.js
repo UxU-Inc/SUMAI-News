@@ -66,21 +66,26 @@ function useBookmark() {
     })
   }, [])
 
-  const changeBookmark = (event, bool) => {
-    console.log(event.target)
-    if (typeof (event.target.alt) !== "undefined" && !loading) {
+  const changeBookmark = React.useCallback((event, bool) => {
+    let newsAgency
+    if(typeof (event.target.alt) === "undefined") {
+      newsAgency = event.target.getElementsByTagName('img')[0].alt
+    } else {
+      newsAgency = event.target.alt
+    }
+    if (!loading) {
       setLoading(true)
       if (bool === true) {
-        axios.post('/api/bookmark/add', { bookmark: event.target.alt }).then(() => {
-          setBookmark([...bookmark, event.target.alt]) // 추가
+        axios.post('/api/bookmark/add', { bookmark: newsAgency }).then(() => {
+          setBookmark([...bookmark, newsAgency]) // 추가
         }).catch((err) => {
           // 실패
         }).finally(() => {
           setLoading(false)
         })
       } else {
-        axios.post('/api/bookmark/delete', { bookmark: event.target.alt }).then(() => {
-          bookmark.splice(bookmark.indexOf(event.target.alt), 1)
+        axios.post('/api/bookmark/delete', { bookmark: newsAgency }).then(() => {
+          bookmark.splice(bookmark.indexOf(newsAgency), 1)
           setBookmark([...bookmark])
         }).catch((err) => {
           // 실패
@@ -89,7 +94,8 @@ function useBookmark() {
         })
       }
     }
-  }
+  }, [bookmark, loading])
+
   return [bookmark, nonBookmark, changeBookmark, loading]
 }
 

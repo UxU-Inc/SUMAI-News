@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { useStyles, useBookmark, useItemCount } from './Hook';
+import Dialog from '@material-ui/core/Dialog';
 
 
 function news_agency_logo(news_agency) {

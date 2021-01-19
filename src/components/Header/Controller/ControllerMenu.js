@@ -36,7 +36,7 @@ export default function ControllerMenu() {
   }
   return (
     <Box className={classes.root}>
-      <IconButton style={{ marginRight: "5px" }}
+      <IconButton style={{ margin: "0px 5px" }}
         ref={anchorRef}
         aria-controls={open ? 'menu-list-grow' : undefined}
         aria-haspopup="true"

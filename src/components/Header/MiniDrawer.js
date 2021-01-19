@@ -182,7 +182,7 @@ export default function MiniDrawer(props) {
         </List>
         <Divider />
         <List>
-          <ListItemCreater sm={sm} classes={classes} Icon={BookmarkIcon} url={'/newsAgencyBookmark'} primary={"뉴스사 즐겨찾기"} history={history}/>
+          <ListItemCreater sm={sm} classes={classes} Icon={BookmarkIcon} url={'/newsAgencyBookmark'} primary={"언론사 즐겨찾기"} history={history}/>
         </List>
         <Divider />
         <List>

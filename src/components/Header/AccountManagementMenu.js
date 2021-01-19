@@ -1,6 +1,5 @@
 import React from 'react'; 
 import './Header.css';
-import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
@@ -8,21 +7,36 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Avatar from '@material-ui/core/Avatar';
+import CryptoJS from 'crypto-js';
 
-// import html2canvas from 'html2canvas';
-// import emailjs from 'emailjs-com';
 import { onLogout } from './../../functions/logout';
 import { useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
 
+
+function re_name(name) {
+  let re_name = '';
+
+  if(/[a-zA-Z0-9]/.test(name.charAt(0))) {
+    re_name = name.charAt(0);
+  } else if(name.length >= 3){
+      if (/[a-zA-Z0-9]/.test(name.substring(name.length-2, name.length))) {
+          re_name = name.charAt(0);
+      } else {
+          re_name = name.substring(name.length-2, name.length);
+      }
+  } else {
+      re_name = name;
+  }
+
+  return re_name;
+}
 
 export default function AccountManagementMenu() {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
     const currentUser = useSelector(store => store.authentication.status.currentUser)
-    const history = useHistory()
-    const location = useLocation()
+    const currentId = useSelector(store => store.authentication.status.currentId)
 
     const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);
@@ -63,10 +77,9 @@ export default function AccountManagementMenu() {
           onClick={handleToggle}
           style={{color: "#0000008A", cursor:'pointer'}}
         >
-          {currentUser}님
-          <IconButton style={{padding: "0px"}}>
-            <ExpandMoreIcon />
-          </IconButton>
+          <Avatar style={{backgroundColor: '#' + CryptoJS.MD5(currentId).toString().substring(1, 7), width: "2.2em", height: "2.2em", fontWeight: 'bold', textTransform: "none"}}>
+              {re_name(currentUser)}
+          </Avatar>
         </Box>
         <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
           {({ TransitionProps, placement }) => (

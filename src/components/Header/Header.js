@@ -81,8 +81,8 @@ export default function Header(props) {
   const theme = useTheme();
   const xsm = useMediaQuery(theme.breakpoints.up('xsm'));
   const w_365 = useMediaQuery(theme.breakpoints.up(365));
-  const w_405 = useMediaQuery(theme.breakpoints.up(405));
   const w_420 = useMediaQuery(theme.breakpoints.up(420));
+  const w_480 = useMediaQuery(theme.breakpoints.up(480));
   const sm = useMediaQuery(theme.breakpoints.up('sm'));
   const md = useMediaQuery(theme.breakpoints.up('md'));
   const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn);
@@ -123,18 +123,19 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <a href="/" className={classes.link} style={{minWidth: w_420 ? "201px" : "142px"}}>
+          <a href="/" className={classes.link} style={{minWidth: w_480 ? "211px" : "152px"}}>
             <img src={imgLogo} alt="SUMAI" className={classes.imgLogo} />
 
-            <Typography className={classes.summaryTypo} style={{ fontSize: "28px", marginLeft: "10px" }}>
-              {w_420 ? "뉴스 요약" : "뉴스"}
+            <Typography className={classes.summaryTypo} style={{ fontSize: "28px", margin: "0px 10px" }}>
+              {w_480 ? "뉴스 요약" : "뉴스"}
             </Typography>
           </a>
 
           <div style={{ flexGrow: 1 }} />
-          {w_405?<ControllerMenu/>:<span/>}
 
-          {w_365? <Menu/> : <div style={{marginLeft: '10px'}}/>}
+          {w_420 ? <ControllerMenu/> : <span/>}
+
+          {w_365 ? <Menu/> : <div style={{marginLeft: '10px'}}/>}
 
           {isLoggedIn ? loginLayout : loginButton}
 

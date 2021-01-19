@@ -54,6 +54,14 @@ const useStyles = makeStyles((theme) => ({
 
 function FeedbackDialogSnackbar(props) {
   const { open, setOpen, state } = props
+  
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    
+    setOpen(false);
+  }
 
   const SnackbarAlert = React.useCallback(() => {
     if (state === 200) return (
@@ -69,7 +77,7 @@ function FeedbackDialogSnackbar(props) {
   }, [state])
 
   return (
-    <Snackbar autoHideDuration={3000} open={open} onClose={() => setOpen(false)}>
+    <Snackbar autoHideDuration={3000} open={open} onClose={handleClose}>
       <SnackbarAlert />
     </Snackbar>
   )

@@ -10,7 +10,7 @@ import Body from './components/Body/Body';
 import Like from './components/Body/Like';
 import History from './components/Body/History';
 import Trending from './components/Body/Trending';
-import NewsAgencyBookmark from './components/Body/NewsAgencyBookmark';
+import NewsAgencyBookmark from './components/Body/NewsAgencyBookmark/index';
 
 
 function App() {

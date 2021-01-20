@@ -14,7 +14,6 @@ import { onLogout } from './../../functions/logout';
 import { useSelector } from 'react-redux';
 
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 
 function re_name(name) {
   let re_name = '';
@@ -34,6 +33,14 @@ function re_name(name) {
   return re_name;
 }
 
+function profile_image(id) {
+  return new Promise((res, rej) => axios.post('/api/account/accountLoad/' + id, {}).then((data) => {
+    res(data.data.image);
+  }).catch(() => {
+    res('');
+  }))
+}
+
 export default function AccountManagementMenu() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -42,7 +49,6 @@ export default function AccountManagementMenu() {
   const [image, setImage] = React.useState('');
   const [avatarName, setAvatarName] = React.useState('');
   const [avatarColor, setAvatarColor] = React.useState('');
-  const location = useLocation();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -74,23 +80,15 @@ export default function AccountManagementMenu() {
     prevOpen.current = open;
   }, [open]);
 
-  const profile_image = React.useCallback((id) => {
-    axios.get('/api/account/accountLoad/' + id).then((data) => {
-      setImage(data.data.image);
-      setAvatarName(re_name(currentUser))
-      setAvatarColor('#' + CryptoJS.MD5(currentId).toString().substring(1, 7))
-    })
-  })
-
   React.useEffect(() => {
     if (currentId !== '-1') {
-      profile_image(currentId)
+      profile_image(currentId).then((imageURL) => {
+        setImage(imageURL);
+        setAvatarName(re_name(currentUser))
+        setAvatarColor('#' + CryptoJS.MD5(currentId).toString().substring(1, 7))
+      })
     }
-  }, [currentId, currentUser, location, profile_image]);
-
-  React.useEffect(() => {
-    console.log("String Act");
-  })
+  }, [currentId, currentUser]);
 
   return (
     <Box>
@@ -101,7 +99,6 @@ export default function AccountManagementMenu() {
         onClick={handleToggle}
         style={{ color: "#0000008A", cursor: 'pointer' }}
       >
-        {console.log("imageURL : " + image)}
         {
           image === '' ?
             <Avatar style={{ backgroundColor: avatarColor, width: "2.2em", height: "2.2em", fontWeight: 'bold', textTransform: "none" }}>

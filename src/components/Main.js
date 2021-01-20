@@ -15,13 +15,14 @@ const xs_size = 0;
 const xsm_size = 580;
 const sm_size = 840;
 const md_size = 1100;
+const lg_size = 1240;
 
 export default function Main(props) {
-  const {Body} = props
-  
+  const { Body } = props
+
   const [open, setOpen] = useState(false);
   const [colsCount, setColsCount] = useState(0)
-  
+
   const history = useHistory()
   const location = useLocation()
   const dispatch = useDispatch()
@@ -32,24 +33,25 @@ export default function Main(props) {
   const sm = useMediaQuery(theme.breakpoints.between(xsm_size, sm_size));
   const md = useMediaQuery(theme.breakpoints.between(sm_size, md_size));
   const lg = useMediaQuery(theme.breakpoints.up(md_size));
-  
+  const xl = useMediaQuery(theme.breakpoints.up(lg_size));
+
   const columns = useSelector(store => store.contentSetting.columns)
 
   const handleColumns = useCallback(() => {
     const changeCount = (count) => {
-      setColsCount(count< columns? count: columns)
+      setColsCount(count < columns ? count : columns)
     }
-    if(xsm)     changeCount(1);
-    else if(sm) changeCount(2);
-    else if(md) changeCount(3);
-    else if(lg) changeCount(4);
+    if (xsm) changeCount(1);
+    else if (sm) changeCount(2);
+    else if (md) changeCount(3);
+    else if (lg) changeCount(4);
   }, [xsm, sm, md, lg, columns])
 
   useEffect(() => {
     handleColumns()
   }, [handleColumns]);
 
-  
+
   useEffect(() => { //컴포넌트 렌더링이 맨 처음 완료된 이후에 바로 세션확인
     // 쿠키 차단 설정 시 자동 로그아웃
     if (!navigator.cookieEnabled && isLoggedIn) {
@@ -95,7 +97,7 @@ export default function Main(props) {
     getStatusRequest().then(
       (res) => {
         // if session is not valid
-        if (res.type==="AUTH_GET_STATUS_FAILURE") {
+        if (res.type === "AUTH_GET_STATUS_FAILURE") {
           // logout the session
           loginData = {
             isLoggedIn: false,
@@ -106,16 +108,16 @@ export default function Main(props) {
         }
       }
     )
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]) // 다른 훅을 읽음으로써 getInfo를 여러번 할 수 있기에 location만으로 제한
 
-  return(
+  return (
     <Box>
-      <Header open={open} setOpen={setOpen}/>
-      
-      <Box style={{display: 'flex'}}>
+      <Header open={open} setOpen={setOpen} />
+
+      <Box style={{ display: 'flex' }}>
         <MiniDrawer open={open} />
-        <Body colsCount={colsCount} lg={lg}/>
+        <Body colsCount={colsCount} lg={lg} xl={xl} />
       </Box>
 
     </Box>

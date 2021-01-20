@@ -98,7 +98,7 @@ export default function Header(props) {
   const { open, setOpen } = props
 
   const loginButton = (
-    <Button onClick={() => window.location.assign("https://sumai.co.kr/login?url="+window.location.href)} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
+    <Button onClick={() => window.location.assign("https://sumai.co.kr/login?url=" + window.location.href)} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
       <AccountIcon style={{ marginRight: "5px", }} />
         로그인
     </Button>
@@ -106,7 +106,7 @@ export default function Header(props) {
   const loginLayout = (
     <Box display="flex" flexDirection="row" style={{ marginLeft: "auto", color: 'rgba(0, 0, 0, 0.87)' }}>
       <Box p={1}>
-          {AccountManagementMenu()}
+        {AccountManagementMenu()}
       </Box>
     </Box>
   )
@@ -137,7 +137,7 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <a href="/" className={classes.link} style={{minWidth: w_480 ? "211px" : "152px"}}>
+          <a href="/" className={classes.link} style={{ minWidth: w_480 ? "211px" : "152px" }}>
             <img src={imgLogo} alt="SUMAI" className={classes.imgLogo} />
 
             <Typography className={classes.summaryTypo} style={{ fontSize: "28px", margin: "0px 10px" }}>
@@ -147,9 +147,9 @@ export default function Header(props) {
 
           <div style={{ flexGrow: 1 }} />
 
-          {w_420 ? <ControllerMenu/> : <span/>}
+          {w_420 ? <ControllerMenu /> : <span />}
 
-          {w_365 ? <Menu/> : <div style={{marginLeft: '10px'}}/>}
+          {w_365 ? <Menu /> : <div style={{ marginLeft: '10px' }} />}
 
           {isLoggedIn ? loginLayout : loginButton}
 
@@ -162,7 +162,7 @@ export default function Header(props) {
         onClose={snackBarHandleClose}
       >
         <Alert onClose={snackBarHandleClose} severity="warning">
-          <AlertTitle>잘못된 요약문이 생성될 수 있습니다. </AlertTitle> 
+          <AlertTitle>잘못된 요약문이 생성될 수 있습니다. </AlertTitle>
           정확한 내용을 살펴보려면 원문 내용을 직접 읽어보세요.
         </Alert>
       </Snackbar>

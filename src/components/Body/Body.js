@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     backgroundColor: theme.palette.background.default,
 
-    margin: "16px 8px",
     [theme.breakpoints.between(0, 640)]: {
       margin: '0px',
     },
@@ -30,12 +29,11 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.between(760, 840)]: {
       margin: '16px 8px',
     },
-    [theme.breakpoints.between(840, 1300)]: {
-      margin: '16px 4px',
+    [theme.breakpoints.up(840)]: {
+      margin: '16px 8px',
     },
   },
   gridContents: {
-    padding: '0px 8px 16px 8px',
     [theme.breakpoints.between(0, 580)]: {
       padding: '0px 0px 16px 0px',
     },
@@ -48,15 +46,15 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.between(760, 840)]: {
       padding: '0px 8px 16px 8px',
     },
-    [theme.breakpoints.between(840, 1300)]: {
-      padding: '0px 4px 8px 4px',
+    [theme.breakpoints.up(840)]: {
+      padding: '0px 8px 16px 8px',
     },
   }
 }));
 
 
 export default function Body(props) {
-  const { colsCount, lg } = props
+  const { colsCount, lg, xl } = props
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [loading, setLoading] = useState(false)
@@ -69,27 +67,27 @@ export default function Body(props) {
   const NewsMain = useCallback((idx, cnt) => {
     const id = currentId
     axios.post('http://localhost:3306/api/news/lastest', { id, idx, cnt })   //링크 바꿔야됨
-    .then((response) => {
-      setNewsData(newsData.concat(response.data))
-      if(response.data.length < cnt || newsData.length >= 288) {
-        setIsAllLoad(true)
-      }
-      setLoading(false)
-    }).catch((error) => {
+      .then((response) => {
+        setNewsData(newsData.concat(response.data))
+        if (response.data.length < cnt || newsData.length >= 288) {
+          setIsAllLoad(true)
+        }
+        setLoading(false)
+      }).catch((error) => {
 
-    })
+      })
   }, [newsData, currentId])
 
   const handleSkeleton = useCallback(() => {
     let arr = [], temp = []
     let sum = 0
-    for(let i=0; i<colsCount; i++) {
+    for (let i = 0; i < colsCount; i++) {
       arr[i] = itemRef.current[i].offsetTop
       sum += arr[i]
     }
     sum /= colsCount
     arr.forEach((el, i) => {
-      if(arr[i] - sum > 200) temp[i] = true
+      if (arr[i] - sum > 200) temp[i] = true
     })
     setHideSkel(temp)
   }, [colsCount]);
@@ -99,10 +97,10 @@ export default function Body(props) {
     const { scrollHeight } = document.body;
     // IE에서는 document.documentElement 를 사용.
     const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
-    
-    if (newsData[newsData.length-1] && scrollHeight - innerHeight - scrollTop < 300 && !loading && !isAllLoad) {
+
+    if (newsData[newsData.length - 1] && scrollHeight - innerHeight - scrollTop < 300 && !loading && !isAllLoad) {
       setLoading(true)
-      NewsMain(newsData[newsData.length-1].idx-1, colsCount===1? 12:24)
+      NewsMain(newsData[newsData.length - 1].idx - 1, colsCount === 1 ? 12 : 24)
       // console.log(newsData[newsData.length-1].idx-1)
     }
   }, [loading, newsData, colsCount, NewsMain, isAllLoad]);
@@ -117,12 +115,12 @@ export default function Body(props) {
   }, [handleSkeleton]);
 
   useEffect(() => {
-    if(!isAllLoad && !loading && currentId !== '-1' && newsData.length < (colsCount===1? 12:24)) {
-      let idx = null 
-      if(newsData[newsData.length-1]) idx = newsData[newsData.length-1].idx-1;
+    if (!isAllLoad && !loading && newsData.length < (colsCount === 1 ? 12 : 24)) {
+      let idx = null
+      if (newsData[newsData.length - 1]) idx = newsData[newsData.length - 1].idx - 1;
       else idx = -1;
       setLoading(true)
-      NewsMain(idx, colsCount===1? 12:24)  
+      NewsMain(idx, colsCount === 1 ? 12 : 24)
     }
 
   }, [colsCount, NewsMain, newsData, isAllLoad, loading, currentId]);
@@ -130,17 +128,17 @@ export default function Body(props) {
   return (
     <Box className={classes.root}>
       <Box display="flex" width="100vw">
-        {['', '', '', ''].slice(0, colsCount).map((t, k) => ( 
+        {['', '', '', ''].slice(0, colsCount).map((t, k) => (
           // 창 크기가 lg이고, colsCount가 1일 경우 margin-left는 150px, max-width는 1000px
-          <Grid container direction="column" style={{height:"auto", marginLeft:lg&&colsCount===1? '150px': 0, maxWidth:lg&&colsCount===1? '1000px': 'none'}} key={k}>
-            {newsData.slice(0, newsData.length).filter((x, idx) => idx%colsCount===k).map((tile, key) => (
-              <Grid item key={key} className={classes.gridContents} style={{padding: "none"}}>
-                <Contents news={tile} currentId={currentId}/>
+          <Grid container direction="column" style={{ height: "auto", marginLeft: xl && colsCount === 1 ? '150px' : lg ? '60px' : 0, maxWidth: lg && colsCount === 1 ? '1000px' : 'none' }} key={k}>
+            {newsData.slice(0, newsData.length).filter((x, idx) => idx % colsCount === k).map((tile, key) => (
+              <Grid item key={key} className={classes.gridContents} style={{ padding: "none" }}>
+                <Contents news={tile} currentId={currentId} />
               </Grid>
             ))}
-            <Grid style={newsData.length === 0? {display:"none"}:{padding: "10px"}} ref={(el) => itemRef.current[k] = el}>
-              {!isAllLoad && !hideSkel[k]? <><Skeleton variant="text" height={100} />
-              <Skeleton variant="rect" height={300} /></>:null}
+            <Grid style={newsData.length === 0 ? { display: "none" } : { padding: "10px" }} ref={(el) => itemRef.current[k] = el}>
+              {!isAllLoad && !hideSkel[k] ? <><Skeleton variant="text" height={100} />
+                <Skeleton variant="rect" height={300} /></> : null}
             </Grid>
           </Grid>
         ))}

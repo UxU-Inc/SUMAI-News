@@ -6,6 +6,7 @@ import Like from './components/Body/Like';
 import History from './components/Body/History';
 import Trending from './components/Body/Trending';
 import NewsAgencyBookmark from './components/Body/NewsAgencyBookmark/index';
+import NotFound from './components/NotFound'
 
 
 function App() {
@@ -13,20 +14,22 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/" render={(props) => (
-          <Main {...props} Body={Body}/>
+          <Main {...props} Body={Body} />
         )} />
         <Route exact path="/trending" render={(props) => (
-          <Main {...props} Body={Trending}/>
+          <Main {...props} Body={Trending} />
         )} />
         <Route exact path="/history" render={(props) => (
-          <Main {...props} Body={History}/>
+          <Main {...props} Body={History} />
         )} />
         <Route exact path="/like" render={(props) => (
-          <Main {...props} Body={Like}/>
+          <Main {...props} Body={Like} />
         )} />
         <Route exact path="/newsAgencyBookmark" render={(props) => (
-          <Main {...props} Body={NewsAgencyBookmark}/>
+          <Main {...props} Body={NewsAgencyBookmark} />
         )} />
+
+        <Route component={NotFound} status={404} />
       </Switch>
     </Router>
   );

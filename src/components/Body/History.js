@@ -68,7 +68,7 @@ export default function History(props) {
 
   const History = useCallback((time, cnt) => {
     const id = currentId
-    axios.post('http://localhost:3306/api/news/history', { id, time, cnt })   //링크 바꿔야됨
+    axios.post('/api/news/history', { id, time, cnt })
     .then((response) => {
       setNewsData(newsData.concat(response.data))
       if(response.data.length < cnt) {
@@ -137,9 +137,12 @@ export default function History(props) {
                 <Contents news={tile} currentId={currentId}/>
               </Grid>
             ))}
-            <Grid style={newsData.length === 0? {display:"none"}:{padding: "10px"}} ref={(el) => itemRef.current[k] = el}>
-              {!isAllLoad && !hideSkel[k]? <><Skeleton variant="text" height={100} />
-              <Skeleton variant="rect" height={300} /></>:null}
+            <Grid className={classes.gridContents} style={newsData.length === 0? {display:"none"}:null} ref={(el) => itemRef.current[k] = el}>
+              {!isAllLoad && !hideSkel[k]? <>
+                <Skeleton variant="rect" height={80} />
+                <Box style={{padding: "2px"}} />
+                <Skeleton variant="rect" height={300} />
+              </>:null}
             </Grid>
           </Grid>
         ))}

@@ -63,7 +63,7 @@ export default function Trending(props) {
 
   const Trending = useCallback((cnt) => {
     const id = currentId
-    axios.post('http://localhost:3306/api/news/trending', { id, cnt })   //링크 바꿔야됨
+    axios.post('/api/news/trending', { id, cnt })
     .then((response) => {
       setNewsData(response.data)
     }).catch((error) => {

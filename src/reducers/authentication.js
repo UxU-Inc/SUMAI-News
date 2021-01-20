@@ -105,7 +105,8 @@ export default function authentication(state = initialState, action) {
           ...state.status,
           loaded: true,
           valid: false,
-          isLoggedIn: false
+          isLoggedIn: false,
+          currentId: ''
         }
       }
     /* LOGOUT */

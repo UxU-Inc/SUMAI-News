@@ -85,10 +85,10 @@ export default function RecipeReviewCard(props) {
   }, [liked_, idx]);
 
   const like = () => {
-    if(currentId !== "") {
+    if(currentId !== "-1" && currentId !== "") {
       const id = currentId
       const sign = liked? -1:1
-      axios.post('http://localhost:3306/api/news/like', { id, idx, sign })  //링크 바꿔야됨
+      axios.post('/api/news/like', { id, idx, sign })
       .then((response) => {
         setIiked(!liked)
       }).catch((error) => {
@@ -101,9 +101,9 @@ export default function RecipeReviewCard(props) {
 
   const click = () => {
     window.open(url)
-    if(currentId !== "") {
+    if(currentId !== "-1" && currentId !== "") {
       const id = currentId
-      axios.post('http://localhost:3306/api/news/click', { id, idx })  //링크 바꿔야됨
+      axios.post('/api/news/click', { id, idx })
       .then((response) => {
         
       }).catch((error) => {

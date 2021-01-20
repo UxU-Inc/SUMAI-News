@@ -138,9 +138,10 @@ function LoginChecker(props) {
   const isLoggedIn = useSelector(store => store.authentication.status.isLoggedIn)
   const location = useLocation()
 
+  
   React.useEffect(() => {
     setOpen(false)
-  }, [location])
+  }, [props, location])
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -151,10 +152,18 @@ function LoginChecker(props) {
   }
 
   const checkLogin = React.useCallback(() => {
-    if(!isLoggedIn) setOpen(true)
+    if(!isLoggedIn) {
+      if(open) {
+        setOpen(false)
+        setTimeout(() => setOpen(true), 0)
+      }else{
+        setOpen(true)
+      }
+      
+    }
 
     return isLoggedIn
-  }, [isLoggedIn])
+  }, [isLoggedIn, open])
 
   const component = () => {
     return(
@@ -198,7 +207,7 @@ export default function MiniDrawer(props) {
 
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
-  const [checkLogin, CheckSnackbar] = LoginChecker()
+  const [checkLogin, CheckSnackbar] = LoginChecker(dialogOpen)
 
   return (
     <Box>

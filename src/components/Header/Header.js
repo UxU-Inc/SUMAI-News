@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     background: '#ffffff',
+    [theme.breakpoints.between(0, 600)]: {
+      height: '56px',
+    },
   },
   toolbar: {
     display: 'flex',

@@ -227,7 +227,7 @@ export default function MiniDrawer(props) {
 
         <div className={classes.toolbar} />
 
-        <List className="MenuList">
+        <List className="MenuList" style={{paddingTop:'0'}}>
           <ListItemCreater sm={sm} classes={classes} Icon={HomeIcon} url={'/'} primary={"홈"} history={history} checkLogin={checkLogin}/>
           <ListItemCreater sm={sm} classes={classes} Icon={WhatshotIcon} url={'/trending'} primary={"인기"} history={history} checkLogin={checkLogin}/>
           <ListItemCreater sm={sm} classes={classes} Icon={HistoryIcon} url={'/history'} primary={"열람 기록"} history={history} checkLogin={checkLogin} login={true}/>

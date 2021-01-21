@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -8,51 +7,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 import Contents from './Contents';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    backgroundColor: theme.palette.background.default,
-
-    margin: "16px 8px",
-    [theme.breakpoints.between(0, 640)]: {
-      margin: '0px',
-    },
-    [theme.breakpoints.between(580, 640)]: {
-      margin: '0px',
-    },
-    [theme.breakpoints.between(640, 760)]: {
-      margin: '8px 4px',
-    },
-    [theme.breakpoints.between(760, 840)]: {
-      margin: '16px 8px',
-    },
-    [theme.breakpoints.between(840, 1300)]: {
-      margin: '16px 4px',
-    },
-  },
-  gridContents: {
-    padding: '0px 8px 16px 8px',
-    [theme.breakpoints.between(0, 580)]: {
-      padding: '0px 0px 16px 0px',
-    },
-    [theme.breakpoints.between(580, 640)]: {
-      padding: '0px 0px 8px 0px',
-    },
-    [theme.breakpoints.between(640, 760)]: {
-      padding: '0px 4px 8px 4px',
-    },
-    [theme.breakpoints.between(760, 840)]: {
-      padding: '0px 8px 16px 8px',
-    },
-    [theme.breakpoints.between(840, 1300)]: {
-      padding: '0px 4px 8px 4px',
-    },
-  }
-}));
+import useSkeletonHandler from './useSkeletonHandler';
+import { useStyles } from './BodyStyles';
 
 
 export default function Like(props) {
@@ -61,10 +17,11 @@ export default function Like(props) {
   const [newsData, setNewsData] = useState([])
   const [loading, setLoading] = useState(false)
   const [isAllLoad, setIsAllLoad] = useState(false)
-  const [hideSkel, setHideSkel] = useState([])
   const currentId = useSelector(store => store.authentication.status.currentId)
 
   const itemRef = useRef([])
+
+  const [skelOffsetTop, hideSkel] = useSkeletonHandler(newsData, colsCount, itemRef)
 
   const LikedNews = useCallback((time, cnt) => {
     const id = currentId
@@ -80,40 +37,22 @@ export default function Like(props) {
       })
   }, [newsData, currentId])
 
-  const handleSkeleton = useCallback(() => {
-    let arr = [], temp = []
-    let sum = 0
-    for (let i = 0; i < colsCount; i++) {
-      arr[i] = itemRef.current[i].offsetTop
-      sum += arr[i]
-    }
-    sum /= colsCount
-    arr.forEach((el, i) => {
-      if (arr[i] - sum > 200) temp[i] = true
-    })
-    setHideSkel(temp)
-  }, [colsCount]);
-
   const handleScroll = useCallback(() => {
     const { innerHeight } = window;
     const { scrollHeight } = document.body;
     // IE에서는 document.documentElement 를 사용.
     const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
 
-    if (newsData[newsData.length - 1] && scrollHeight - innerHeight - scrollTop < 300 && !loading && !isAllLoad) {
+    if (newsData[newsData.length - 1] && (scrollHeight - innerHeight - scrollTop < 300 || skelOffsetTop - innerHeight - scrollTop < -250) && !loading && !isAllLoad) {
       setLoading(true)
       LikedNews(newsData[newsData.length - 1].requestTime, colsCount === 1 ? 12 : 24)
     }
-  }, [loading, newsData, colsCount, LikedNews, isAllLoad]);
+  }, [loading, newsData, colsCount, LikedNews, isAllLoad, skelOffsetTop]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
-
-  useEffect(() => {
-    handleSkeleton()
-  }, [handleSkeleton]);
 
   useEffect(() => {
     if (!isAllLoad && !loading && currentId !== '-1' && newsData.length < (colsCount === 1 ? 12 : 24)) {
@@ -141,7 +80,7 @@ export default function Like(props) {
               {!isAllLoad && !hideSkel[k] ? <>
                 <Skeleton variant="rect" height={80} />
                 <Box style={{ padding: "2px" }} />
-                <Skeleton variant="rect" height={300} />
+                <Skeleton variant="rect" height={250} />
               </> : null}
             </Grid>
           </Grid>

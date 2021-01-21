@@ -22,8 +22,7 @@ import AccountManagementMenu from './AccountManagementMenu';
 import Menu from './Menu'
 
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import * as root from '../../rootValue';
 import ControllerMenu from './Controller/ControllerMenu';
@@ -79,10 +78,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#fff",
   },
 }))
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 export default function Header(props) {
   const classes = useStyles();
@@ -161,7 +156,7 @@ export default function Header(props) {
         autoHideDuration={5000}
         onClose={snackBarHandleClose}
       >
-        <Alert onClose={snackBarHandleClose} severity="warning">
+        <Alert onClose={snackBarHandleClose} severity="warning" variant="filled">
           <AlertTitle>잘못된 요약문이 생성될 수 있습니다. </AlertTitle>
           정확한 내용을 살펴보려면 원문 내용을 직접 읽어보세요.
         </Alert>

@@ -9,7 +9,7 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Alert from '@material-ui/lab/Alert';
 
 import * as NewsAgencyInfo from './NewsAgencyInfo'
 import { useSelector } from 'react-redux';
@@ -66,10 +66,6 @@ const useStyles = makeStyles((theme) => ({
 
 function news_agency_logo(news_agency) {
   return '/images/news_agency/' + news_agency + '.png';
-}
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 export default function RecipeReviewCard(props) {
@@ -130,13 +126,12 @@ export default function RecipeReviewCard(props) {
               <ThumbUpAltIcon color={liked? "primary":"inherit"} style={{ fontSize: "30px" }} />
             </IconButton>
             <Snackbar open={loginError} autoHideDuration={3000} onClose={snackBarHandleClose}>
-              <Alert onClose={snackBarHandleClose} severity="error">
-                로그인을 해주세요.
+              <Alert onClose={snackBarHandleClose} severity="error" variant="filled">
+                로그인이 필요한 서비스입니다.
               </Alert>
             </Snackbar>
           </Box>
         }
-        // <Typography style={{ color: "#000" }}>
         subheader={
           <Box onClick={() => click()} style={{textDecoration: 'none', cursor:'pointer', paddingBottom:"8px"}}>
             <Typography variant="h6" style={{ color: "#000" }}>
@@ -146,7 +141,6 @@ export default function RecipeReviewCard(props) {
         }
       >
       </CardHeader>
-        {/* <Typography color="textSecondary" component="p" style={{fontFamily: "NotoSansKR-Light", whiteSpace: "pre-wrap"}}> */}
       <CardContent onClick={() => click()} style={{textDecoration: 'none', cursor:'pointer'}}>
         <Typography variant="body2" color="textSecondary" component="p" style={{pointerEvents: "none", userSelect: "none", fontSize: summaryFontSize+"px"}}>
           {summary}

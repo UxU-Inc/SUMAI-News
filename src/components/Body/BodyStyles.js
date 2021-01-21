@@ -46,6 +46,18 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up(1300)]: {
             padding: '0px 8px 16px 8px',
         },
+    },
+    grid : {
+      [theme.breakpoints.up(580)]: {
+        '&::after': {
+          flex: '1',
+          content: '""',
+        },
+        '&::before': {
+          flex: '0.5',
+          content: '""',
+        }
+      }
     }
 }));
 

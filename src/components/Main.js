@@ -117,7 +117,7 @@ export default function Main(props) {
 
       <Box style={{ display: 'flex' }}>
         <MiniDrawer open={open} />
-        <Body colsCount={colsCount} lg={lg} xl={xl} />
+        <Body colsCount={colsCount} />
       </Box>
 
     </Box>

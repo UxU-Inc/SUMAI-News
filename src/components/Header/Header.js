@@ -88,7 +88,6 @@ export default function Header(props) {
   const w_365 = useMediaQuery(theme.breakpoints.up(365));
   const w_420 = useMediaQuery(theme.breakpoints.up(420));
   const w_480 = useMediaQuery(theme.breakpoints.up(480));
-  const sm = useMediaQuery(theme.breakpoints.up('sm'));
   const md = useMediaQuery(theme.breakpoints.up('md'));
   const isLoggedIn = useSelector(state => state.authentication.status.isLoggedIn);
   const [snackOpen, setSnackOpen] = useState(true)

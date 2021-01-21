@@ -10,7 +10,7 @@ import { useStyles } from './BodyStyles';
 
 
 export default function Trending(props) {
-  const { colsCount, lg, xl } = props
+  const { colsCount } = props
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [loading, setLoading] = useState(false)

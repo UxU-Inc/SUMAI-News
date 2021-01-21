@@ -55,12 +55,24 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up(1300)]: {
       padding: '0px 8px 16px 8px',
     },
+  },
+  grid : {
+    [theme.breakpoints.up(580)]: {
+      '&::after': {
+        flex: '1',
+        content: '""',
+      },
+      '&::before': {
+        flex: '0.5',
+        content: '""',
+      }
+    }
   }
 }));
 
 
 export default function Body(props) {
-  const { colsCount, lg, xl } = props
+  const { colsCount } = props
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [loading, setLoading] = useState(false)
@@ -133,10 +145,10 @@ export default function Body(props) {
 
   return (
     <Box className={classes.root}>
-      <Box display="flex" width="100vw">
+      <Box className={classes.grid} display="flex" width="100vw">
         {['', '', '', ''].slice(0, colsCount).map((t, k) => (
           // 창 크기가 lg이고, colsCount가 1일 경우 margin-left는 150px, max-width는 1000px
-          <Grid container direction="column" style={{ height: "auto", marginLeft: lg && colsCount === 1 ? '150px' : 0, maxWidth: lg && colsCount === 1 ? '1000px' : 'none' }} key={k}>
+          <Grid container direction="column" style={{ height: "auto", flex: '4' }} key={k}>
             {newsData.slice(0, newsData.length).filter((x, idx) => idx % colsCount === k).map((tile, key) => (
               <Grid item key={key} className={classes.gridContents} style={{ padding: "none" }}>
                 <Contents news={tile} currentId={currentId} />

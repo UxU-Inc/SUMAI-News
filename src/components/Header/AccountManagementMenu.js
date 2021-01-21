@@ -81,7 +81,7 @@ export default function AccountManagementMenu() {
   }, [open]);
 
   React.useEffect(() => {
-    if (currentId !== '-1') {
+    if (currentId !== '-1' && currentId !== '') {
       profile_image(currentId).then((imageURL) => {
         setImage(imageURL);
         setAvatarName(re_name(currentUser))

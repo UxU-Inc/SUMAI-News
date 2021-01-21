@@ -147,7 +147,7 @@ export default function RecipeReviewCard(props) {
       >
       </CardHeader>
         {/* <Typography color="textSecondary" component="p" style={{fontFamily: "NotoSansKR-Light", whiteSpace: "pre-wrap"}}> */}
-      <CardContent onClick={() => window.open(url)} style={{textDecoration: 'none', cursor:'pointer'}}>
+      <CardContent onClick={() => click()} style={{textDecoration: 'none', cursor:'pointer'}}>
         <Typography variant="body2" color="textSecondary" component="p" style={{pointerEvents: "none", userSelect: "none", fontSize: summaryFontSize+"px"}}>
           {summary}
         </Typography>

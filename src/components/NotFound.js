@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import imgLogo from '../images/sumai_logo_blue.png';
 import Box from '@material-ui/core/Box';
@@ -7,7 +7,7 @@ import { Card } from '@material-ui/core';
 import * as root from '../rootValue';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-const useStyles = theme => ({
+const useStyles = makeStyles((theme => ({
   root: {
     minHeight: '60vh',
     flexDirection: 'column',
@@ -59,7 +59,7 @@ const useStyles = theme => ({
     fontSize: '20px',
     fontWeight: 'bold',
   },
-})
+})))
 
 const Header = (props) => {
   const { matches, classes } = props
@@ -88,8 +88,8 @@ const Header = (props) => {
   )
 }
 
-function EmailLoginComponent(props) {
-  const { classes } = props;
+export default function NotFound() {
+  const classes = useStyles()
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -111,6 +111,4 @@ function EmailLoginComponent(props) {
       </Box>
     </Box>
   )
-
 }
-export default withStyles(useStyles)(EmailLoginComponent);

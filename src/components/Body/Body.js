@@ -23,9 +23,11 @@ export default function Body(props) {
 
   const [skelOffsetTop, hideSkel] = useSkeletonHandler(newsData, colsCount, itemRef)
 
+  const cancelToken = axios.CancelToken.source()
+
   const NewsMain = useCallback((idx, cnt) => {
     const id = currentId
-    axios.post('/api/news/lastest', { id, idx, cnt })
+    axios.post('/api/news/lastest', { id, idx, cnt }, { cancelToken: cancelToken.token })
       .then((response) => {
         setNewsData(newsData.concat(response.data))
         if (response.data.length < cnt || newsData.length >= 288) {
@@ -35,7 +37,7 @@ export default function Body(props) {
       }).catch((error) => {
 
       })
-  }, [newsData, currentId])
+  }, [newsData, currentId, cancelToken])
 
   const handleScroll = useCallback(() => {
     const { innerHeight } = window;
@@ -54,6 +56,11 @@ export default function Body(props) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
+  useEffect(() => {
+    return () => cancelToken.cancel("cancel");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
   useEffect(() => {
     if (!isAllLoad && !loading && currentId !== '-1' && newsData.length === 0) {
       setLoading(true)

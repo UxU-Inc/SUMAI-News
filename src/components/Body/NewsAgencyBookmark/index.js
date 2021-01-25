@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -40,6 +42,14 @@ export default function NewsAgencyBookmark() {
   const classes = useStyles();
   const [bookmark, nonBookmark, changeBookmark, loading] = useBookmark()
   const [itemCount, flexElement] = useItemCount()
+  const currentId = useSelector(store => store.authentication.status.currentId)
+  const history = useHistory()
+
+  useEffect(() => {
+    if (currentId === '') {
+      history.replace("/")
+    }
+  }, [currentId, history]);
 
   return (
     <Box className={classes.root}>

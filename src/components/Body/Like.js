@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -18,14 +19,17 @@ export default function Like(props) {
   const [loading, setLoading] = useState(false)
   const [isAllLoad, setIsAllLoad] = useState(false)
   const currentId = useSelector(store => store.authentication.status.currentId)
+  const history = useHistory()
 
   const itemRef = useRef([])
 
   const [skelOffsetTop, hideSkel] = useSkeletonHandler(newsData, colsCount, itemRef)
 
+  const cancelToken = axios.CancelToken.source()
+
   const LikedNews = useCallback((time, cnt) => {
     const id = currentId
-    axios.post('/api/news/likednews', { id, time, cnt })
+    axios.post('/api/news/likednews', { id, time, cnt }, { cancelToken: cancelToken.token })
       .then((response) => {
         setNewsData(newsData.concat(response.data))
         if (response.data.length < cnt) {
@@ -35,7 +39,7 @@ export default function Like(props) {
       }).catch((error) => {
 
       })
-  }, [newsData, currentId])
+  }, [newsData, currentId, cancelToken])
 
   const handleScroll = useCallback(() => {
     const { innerHeight } = window;
@@ -55,11 +59,22 @@ export default function Like(props) {
   }, [handleScroll]);
 
   useEffect(() => {
+    return () => cancelToken.cancel("cancel");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (!isAllLoad && !loading && currentId !== '-1' && newsData.length === 0) {
       setLoading(true)
       LikedNews(-1, 24)
     }
   }, [LikedNews, newsData, isAllLoad, loading, currentId]);
+
+  useEffect(() => {
+    if (currentId === '') {
+      history.replace("/")
+    }
+  }, [currentId, history]);
 
   return (
     <Box className={classes.root}>

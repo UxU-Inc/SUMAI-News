@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -18,14 +19,17 @@ export default function History(props) {
   const [loading, setLoading] = useState(false)
   const [isAllLoad, setIsAllLoad] = useState(false)
   const currentId = useSelector(store => store.authentication.status.currentId)
+  const history = useHistory()
 
   const itemRef = useRef([])
 
   const [skelOffsetTop, hideSkel] = useSkeletonHandler(newsData, colsCount, itemRef)
 
+  const cancelToken = axios.CancelToken.source()
+
   const History = useCallback((time, cnt) => {
     const id = currentId
-    axios.post('/api/news/history', { id, time, cnt })
+    axios.post('/api/news/history', { id, time, cnt }, { cancelToken: cancelToken.token })
       .then((response) => {
         setNewsData(newsData.concat(response.data))
         if (response.data.length < cnt) {
@@ -35,7 +39,7 @@ export default function History(props) {
       }).catch((error) => {
 
       })
-  }, [newsData, currentId])
+  }, [newsData, currentId, cancelToken])
 
   const handleScroll = useCallback(() => {
     const { innerHeight } = window;
@@ -55,11 +59,22 @@ export default function History(props) {
   }, [handleScroll]);
 
   useEffect(() => {
+    return () => cancelToken.cancel("cancel");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (!isAllLoad && !loading && currentId !== '-1' && newsData.length === 0) {
       setLoading(true)
       History(-1, 24)
     }
   }, [History, newsData, isAllLoad, loading, currentId]);
+
+  useEffect(() => {
+    if (currentId === '') {
+      history.replace("/")
+    }
+  }, [currentId, history]);
 
   return (
     <Box className={classes.root}>
@@ -69,7 +84,7 @@ export default function History(props) {
           <Grid container direction="column" style={{ height: "auto", flex: '4' }} key={k}>
             {newsData.slice(0, newsData.length).filter((x, idx) => idx % colsCount === k).map((tile, key) => (
               <Grid item key={key} className={classes.gridContents} style={{ padding: "none" }}>
-                <Contents news={tile} currentId={currentId} />
+                <Contents news={tile} currentId={currentId} deleteable={true} />
               </Grid>
             ))}
             <Grid className={classes.gridContents} style={newsData.length === 0 ? { display: "none" } : null} ref={(el) => itemRef.current[k] = el}>

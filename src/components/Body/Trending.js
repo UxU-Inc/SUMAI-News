@@ -16,15 +16,22 @@ export default function Trending(props) {
   const [loading, setLoading] = useState(false)
   const currentId = useSelector(store => store.authentication.status.currentId)
 
+  const cancelToken = axios.CancelToken.source()
+
   const Trending = useCallback((cnt) => {
     const id = currentId
-    axios.post('/api/news/trending', { id, cnt })
+    axios.post('/api/news/trending', { id, cnt }, { cancelToken: cancelToken.token })
       .then((response) => {
         setNewsData(response.data)
       }).catch((error) => {
 
       })
-  }, [currentId])
+  }, [currentId, cancelToken])
+
+  useEffect(() => {
+    return () => cancelToken.cancel("cancel");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!loading) {

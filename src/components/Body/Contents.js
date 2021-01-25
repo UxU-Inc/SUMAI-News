@@ -5,11 +5,13 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import Button from '@material-ui/core/Button';
 
 import * as NewsAgencyInfo from './NewsAgencyInfo'
 import { useSelector } from 'react-redux';
@@ -70,10 +72,12 @@ function news_agency_logo(news_agency) {
 
 export default function RecipeReviewCard(props) {
   const classes = useStyles();
-  const { news, currentId } = props;
+  const { news, currentId, deleteable } = props;
   const { idx, title, url, news_agency, summary, liked_ } = news;
   const [liked, setIiked] = useState(false)
   const [loginError, setLoginError] = useState(false)
+  const [deleteCheck, setDeleteCheck] = useState(false)
+  const [deleted, setDeleted] = useState(false)
   const summaryFontSize = useSelector(store => store.contentSetting.fontSize)
 
   useEffect(() => {
@@ -88,32 +92,48 @@ export default function RecipeReviewCard(props) {
       .then((response) => {
         setIiked(!liked)
       }).catch((error) => {
-  
       })
     } else {
       setLoginError(true)
     }
   }
-
   const click = () => {
     window.open(url)
     if(currentId !== "-1" && currentId !== "") {
       const id = currentId
       axios.post('/api/news/click', { id, idx })
       .then((response) => {
-        
       }).catch((error) => {
-  
       })
     }
   }
-  
-  const snackBarHandleClose = (event, reason) => {
-    setLoginError(false)
+  const requsetDelete = (bool) => {
+    if(currentId !== "-1" && currentId !== "") {
+      setDeleteCheck(bool)
+      setDeleted(bool)
+    }
   }
   
-  return (
-    <Card className={classes.root} variant="outlined" display="flex" style={{flex: 1}} >
+  const handleLoginErrorClose = (event, reason) => {
+    setLoginError(false)
+  }
+
+  const handleDeleteCheckClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    if(deleteCheck) {
+      const id = currentId
+      axios.post('/api/news/delete', { id, idx })
+      .then((response) => {
+      }).catch((error) => {
+      })
+    }
+    setDeleteCheck(false)
+  }
+  
+  return (<>
+    <Card className={classes.root} variant="outlined" display="flex" style={deleted? {display:"none"}:{flex: 1}} >
       <CardHeader 
         className={classes.CardHeader}
         title={
@@ -122,11 +142,16 @@ export default function RecipeReviewCard(props) {
               <img src={news_agency_logo(news_agency)} alt={news_agency} className={classes.imgLogo} onError={e => e.target.style.display='none'} />
             </Box>
             <div style={{ flexGrow: 1 }} />
+            {deleteable?
+              <IconButton style={{ padding: "5px" }} onClick={() => requsetDelete(true)}>
+                <DeleteIcon style={{ fontSize: "30px" }} />
+              </IconButton>
+            : null}
             <IconButton style={{ padding: "5px" }} onClick={() => like()}>
               <ThumbUpAltIcon color={liked? "primary":"inherit"} style={{ fontSize: "30px" }} />
             </IconButton>
-            <Snackbar open={loginError} autoHideDuration={3000} onClose={snackBarHandleClose}>
-              <Alert onClose={snackBarHandleClose} severity="error" variant="filled">
+            <Snackbar open={loginError} autoHideDuration={3000} onClose={handleLoginErrorClose}>
+              <Alert onClose={handleLoginErrorClose} severity="error" variant="filled">
                 로그인이 필요한 서비스입니다.
               </Alert>
             </Snackbar>
@@ -147,5 +172,13 @@ export default function RecipeReviewCard(props) {
         </Typography>
       </CardContent>
     </Card>
-  );
+    <Snackbar open={deleteCheck} autoHideDuration={3000} onClose={handleDeleteCheckClose}>
+      <Alert severity="success" variant="filled"
+        action={<Button onClick={() => requsetDelete(false)} color="inherit" size="small">
+          삭제 취소
+        </Button>}>
+        기록이 삭제되었습니다
+      </Alert>
+    </Snackbar>
+  </>);
 }

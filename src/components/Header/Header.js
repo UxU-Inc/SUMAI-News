@@ -82,6 +82,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+
+function setCautionCookie() {
+  const name = 'caution';
+  const value = true;
+  const expires = new Date()
+  expires.setTime(expires.setHours(24, 0, 0, 0));
+
+  document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/;';
+}
+
+function getCautionCookie() {
+  const name = 'caution';
+  const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  return value ? value[2] : null;
+};
+
+
 export default function Header(props) {
   const classes = useStyles();
   const theme = useTheme();
@@ -112,6 +129,8 @@ export default function Header(props) {
       return;
     }
     setSnackOpen(false)
+
+    setCautionCookie()
   }
   return (
     <Box className={classes.root}>
@@ -152,17 +171,22 @@ export default function Header(props) {
 
         </Toolbar>
       </AppBar>
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        open={snackOpen}
-        autoHideDuration={5000}
-        onClose={snackBarHandleClose}
-      >
-        <Alert onClose={snackBarHandleClose} severity="warning" variant="filled">
-          <AlertTitle>잘못된 요약문이 생성될 수 있습니다. </AlertTitle>
-          정확한 내용을 살펴보려면 원문 내용을 직접 읽어보세요.
-        </Alert>
-      </Snackbar>
+
+      {
+        getCautionCookie() === null &&
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={snackOpen}
+          autoHideDuration={5000}
+          onClose={snackBarHandleClose}
+        >
+          <Alert onClose={snackBarHandleClose} severity="warning" variant="filled">
+            <AlertTitle>잘못된 요약문이 생성될 수 있습니다. </AlertTitle>
+            정확한 내용을 살펴보려면 원문 내용을 직접 읽어보세요.
+          </Alert>
+        </Snackbar>
+      }
+
     </Box>
   )
 }

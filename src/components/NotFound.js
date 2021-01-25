@@ -34,8 +34,14 @@ const Header = (props) => {
   const { classes } = props
 
   return (
-    <a href="https://news.sumai.co.kr" style={{ paddingBottom: '16px' }}>
-      <img className={classes.imgLogo} alt='sumai' src={imgLogo} />
+    <a href='https://news.sumai.co.kr' style={{ paddingBottom: '16px', textDecoration: 'none' }}>
+      <Box display='flex' alignItems='center' >
+        <img className={classes.imgLogo} alt='sumai' src={imgLogo} />
+
+        <Typography style={{ fontSize: '28px', margin: '0px 10px', color: '#0000008A', minWidth: '111px' }}>
+          뉴스 요약
+        </Typography>
+      </Box>
     </a>
   )
 }

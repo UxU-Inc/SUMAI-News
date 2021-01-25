@@ -43,11 +43,11 @@ export default function Like(props) {
     // IE에서는 document.documentElement 를 사용.
     const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
 
-    if (newsData[newsData.length - 1] && (scrollHeight - innerHeight - scrollTop < 300 || skelOffsetTop - innerHeight - scrollTop < -250) && !loading && !isAllLoad) {
+    if (newsData[newsData.length - 1] && (scrollHeight - innerHeight - scrollTop < 300 || skelOffsetTop - innerHeight - scrollTop < -200) && !loading && !isAllLoad) {
       setLoading(true)
-      LikedNews(newsData[newsData.length - 1].requestTime, colsCount === 1 ? 12 : 24)
+      LikedNews(newsData[newsData.length - 1].requestTime, 24)
     }
-  }, [loading, newsData, colsCount, LikedNews, isAllLoad, skelOffsetTop]);
+  }, [loading, newsData, LikedNews, isAllLoad, skelOffsetTop]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -55,14 +55,11 @@ export default function Like(props) {
   }, [handleScroll]);
 
   useEffect(() => {
-    if (!isAllLoad && !loading && currentId !== '-1' && newsData.length < (colsCount === 1 ? 12 : 24)) {
-      let requestTime = null
-      if (newsData[newsData.length - 1]) requestTime = newsData[newsData.length - 1].requestTime;
-      else requestTime = -1;
+    if (!isAllLoad && !loading && currentId !== '-1' && newsData.length === 0) {
       setLoading(true)
-      LikedNews(requestTime, colsCount === 1 ? 12 : 24)
+      LikedNews(-1, 24)
     }
-  }, [colsCount, LikedNews, newsData, isAllLoad, loading, currentId]);
+  }, [LikedNews, newsData, isAllLoad, loading, currentId]);
 
   return (
     <Box className={classes.root}>

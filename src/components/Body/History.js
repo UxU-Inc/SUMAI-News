@@ -43,11 +43,11 @@ export default function History(props) {
     // IE에서는 document.documentElement 를 사용.
     const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
 
-    if (newsData[newsData.length - 1] && (scrollHeight - innerHeight - scrollTop < 300 || skelOffsetTop - innerHeight - scrollTop < -250) && !loading && !isAllLoad) {
+    if (newsData[newsData.length - 1] && (scrollHeight - innerHeight - scrollTop < 300 || skelOffsetTop - innerHeight - scrollTop < -200) && !loading && !isAllLoad) {
       setLoading(true)
-      History(newsData[newsData.length - 1].requestTime, colsCount === 1 ? 12 : 24)
+      History(newsData[newsData.length - 1].requestTime, 24)
     }
-  }, [loading, newsData, colsCount, History, isAllLoad, skelOffsetTop]);
+  }, [loading, newsData, History, isAllLoad, skelOffsetTop]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -55,14 +55,11 @@ export default function History(props) {
   }, [handleScroll]);
 
   useEffect(() => {
-    if (!isAllLoad && !loading && currentId !== '-1' && newsData.length < (colsCount === 1 ? 12 : 24)) {
-      let requestTime = null
-      if (newsData[newsData.length - 1]) requestTime = newsData[newsData.length - 1].requestTime;
-      else requestTime = -1;
+    if (!isAllLoad && !loading && currentId !== '-1' && newsData.length === 0) {
       setLoading(true)
-      History(requestTime, colsCount === 1 ? 12 : 24)
+      History(-1, 24)
     }
-  }, [colsCount, History, newsData, isAllLoad, loading, currentId]);
+  }, [History, newsData, isAllLoad, loading, currentId]);
 
   return (
     <Box className={classes.root}>

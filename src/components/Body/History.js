@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -78,6 +79,7 @@ export default function History(props) {
 
   return (
     <Box className={classes.root}>
+      {newsData.length === 0 && loading? <CircularProgress />: null}
       {newsData.length === 0 && !loading && currentId !== '-1' ? <Box>열람한 뉴스가 없습니다.</Box> : null}
       <Box className={classes.grid} display="flex" width="100vw">
         {['', '', '', ''].slice(0, colsCount).map((t, k) => (

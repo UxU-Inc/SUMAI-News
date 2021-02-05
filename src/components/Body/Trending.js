@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -42,6 +43,7 @@ export default function Trending(props) {
 
   return (
     <Box className={classes.root}>
+    {newsData.length === 0 && loading? <CircularProgress />: null}
     <Box className={classes.grid} display="flex" width="100vw">
         {['', '', '', ''].slice(0, colsCount).map((t, k) => (
         <Grid container direction="column" style={{ height: "auto", flex: '4' }} key={k}>

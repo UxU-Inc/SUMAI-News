@@ -18,6 +18,7 @@ export default function History(props) {
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [loading, setLoading] = useState(false)
+  const [scrollLoading, setScrollLoading] = useState(false)
   const [isAllLoad, setIsAllLoad] = useState(false)
   const currentId = useSelector(store => store.authentication.status.currentId)
   const history = useHistory()
@@ -48,11 +49,15 @@ export default function History(props) {
     // IE에서는 document.documentElement 를 사용.
     const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
 
-    if (newsData[newsData.length - 1] && (scrollHeight - innerHeight - scrollTop < 300 || skelOffsetTop - innerHeight - scrollTop < -200) && !loading && !isAllLoad) {
+    if (newsData[newsData.length - 1] && (scrollHeight - innerHeight - scrollTop < 300 || skelOffsetTop - innerHeight - scrollTop < -200)
+      && !loading && !scrollLoading && !isAllLoad) {
       setLoading(true)
+      setScrollLoading(true)
       History(newsData[newsData.length - 1].requestTime, 24)
+    } else if (scrollLoading) {
+      setScrollLoading(false)
     }
-  }, [loading, newsData, History, isAllLoad, skelOffsetTop]);
+  }, [loading, newsData, History, isAllLoad, skelOffsetTop, scrollLoading]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -79,7 +84,7 @@ export default function History(props) {
 
   return (
     <Box className={classes.root}>
-      {newsData.length === 0 && loading? <CircularProgress />: null}
+      {newsData.length === 0 && loading ? <CircularProgress /> : null}
       {newsData.length === 0 && !loading && currentId !== '-1' ? <Box>열람한 뉴스가 없습니다.</Box> : null}
       <Box className={classes.grid} display="flex" width="100vw">
         {['', '', '', ''].slice(0, colsCount).map((t, k) => (

@@ -43,10 +43,10 @@ export default function Trending(props) {
 
   return (
     <Box className={classes.root}>
-    {newsData.length === 0 && loading? <CircularProgress />: null}
-    <Box className={classes.grid} display="flex" width="100vw">
+      {newsData.length === 0 && loading ? <CircularProgress /> : null}
+      <Box className={classes.grid} display="flex" width="100vw">
         {['', '', '', ''].slice(0, colsCount).map((t, k) => (
-        <Grid container direction="column" style={{ height: "auto", flex: '4' }} key={k}>
+          <Grid container direction="column" style={{ height: "auto", flex: '4' }} key={k}>
             {newsData.slice(0, newsData.length).filter((x, idx) => idx % colsCount === k).map((tile, key) => (
               <Grid item key={key} className={classes.gridContents} style={{ padding: "none" }}>
                 <Contents news={tile} currentId={currentId} />

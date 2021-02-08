@@ -29,7 +29,7 @@ export default function Body(props) {
   const [loading, setLoading] = useState(false)
   const [scrollLoading, setScrollLoading] = useState(false)
   const [isAllLoad, setIsAllLoad] = useState(false)
-  const [isRecommend, setIsRecommend] = useState(true)
+  const [recIdx, setRecIdx] = useState()
   const currentId = useSelector(store => store.authentication.status.currentId)
 
   const itemRef = useRef([])
@@ -38,23 +38,37 @@ export default function Body(props) {
 
   const cancelToken = axios.CancelToken.source()
 
-  const NewsMain = useCallback((idx, cnt, check) => {
+  const NewsMain = useCallback((idx, cnt) => {
     const id = currentId
-    axios.post('/api/news/main', { id, idx, cnt, check }, { cancelToken: cancelToken.token })
+    axios.post('/api/news/main', { id, idx, cnt, recIdx }, { cancelToken: cancelToken.token })
       .then((response) => {
+        console.log(response.data)
         const data = shuffle(response.data.slice(0, -1)).concat(response.data[cnt - 1])
         setNewsData(newsData.concat(data))
         if (response.data.length < cnt || newsData.length >= 288) {
           setIsAllLoad(true)
         }
-        if (isRecommend && !response.data[cnt - 1].ranking) {
-          setIsRecommend(false)
+        if (recIdx.length <= cnt || !response.data[cnt - 1].rec) {
+          setRecIdx([])
+        } else {
+          setRecIdx(recIdx.slice(recIdx.indexOf(response.data[cnt - 1].idx) + 1))
         }
         setLoading(false)
       }).catch((error) => {
 
       })
-  }, [newsData, currentId, cancelToken, isRecommend])
+  }, [newsData, currentId, cancelToken, recIdx])
+
+  const getRecIdx = useCallback(() => {
+    const id = currentId
+    axios.post('/api/news/recommend_idx', { id }, { cancelToken: cancelToken.token }).then(data => {
+      setRecIdx(data.data.recommend)
+      setLoading(false)
+    }).catch(err => {
+      setRecIdx([])
+      setLoading(false)
+    })
+  }, [currentId, cancelToken])
 
   const handleScroll = useCallback(() => {
     const { innerHeight } = window;
@@ -66,11 +80,11 @@ export default function Body(props) {
       && !loading && !scrollLoading && !isAllLoad) {
       setLoading(true)
       setScrollLoading(true)
-      NewsMain(newsData[newsData.length - 1].ranking || newsData[newsData.length - 1].idx, 24, isRecommend)
+      NewsMain(newsData[newsData.length - 1].idx, 24)
     } else if (scrollLoading) {
       setScrollLoading(false)
     }
-  }, [loading, newsData, NewsMain, isAllLoad, skelOffsetTop, scrollLoading, isRecommend]);
+  }, [loading, newsData, NewsMain, isAllLoad, skelOffsetTop, scrollLoading]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -83,12 +97,15 @@ export default function Body(props) {
   }, []);
 
   useEffect(() => {
-    if (!isAllLoad && !loading && currentId !== '-1' && newsData.length === 0) {
-      if (currentId === "") setIsRecommend(false)
+    if (currentId !== '-1' && !recIdx && !loading) {
       setLoading(true)
-      NewsMain(-1, 24, isRecommend)
+      getRecIdx()
     }
-  }, [NewsMain, newsData, isAllLoad, loading, currentId, isRecommend]);
+    if (!isAllLoad && !loading && currentId !== '-1' && newsData.length === 0 && recIdx) {
+      setLoading(true)
+      NewsMain(-1, 24)
+    }
+  }, [NewsMain, newsData, isAllLoad, loading, currentId, recIdx, getRecIdx]);
 
   return (
     <Box className={classes.root}>

@@ -15,6 +15,7 @@ export default function Trending(props) {
   const classes = useStyles();
   const [newsData, setNewsData] = useState([])
   const [loading, setLoading] = useState(false)
+  const [isAllLoad, setIsAllLoad] = useState(false)
   const currentId = useSelector(store => store.authentication.status.currentId)
 
   const cancelToken = axios.CancelToken.source()
@@ -24,6 +25,7 @@ export default function Trending(props) {
     axios.post('/api/news/trending', { id, cnt }, { cancelToken: cancelToken.token })
       .then((response) => {
         setNewsData(response.data)
+        setIsAllLoad(true)
       }).catch((error) => {
 
       })
@@ -35,15 +37,15 @@ export default function Trending(props) {
   }, []);
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && !isAllLoad) {
       setLoading(true)
       Trending(48)
     }
-  }, [loading, Trending, currentId]);
+  }, [loading, Trending, currentId, isAllLoad]);
 
   return (
     <Box className={classes.root}>
-      {newsData.length === 0 && loading ? <CircularProgress /> : null}
+      {newsData.length === 0 && !isAllLoad ? <CircularProgress /> : null}
       <Box className={classes.grid} display="flex" width="100vw">
         {['', '', '', ''].slice(0, colsCount).map((t, k) => (
           <Grid container direction="column" style={{ height: "auto", flex: '4' }} key={k}>

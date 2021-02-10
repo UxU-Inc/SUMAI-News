@@ -22,6 +22,12 @@ function shuffle(a) {
   return a
 }
 
+function getHistoryCookie() {
+  const name = 'history';
+  const cookie = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  return cookie ? atob(cookie[2]).split(',') : null;
+};
+
 export default function Body(props) {
   const { colsCount } = props
   const classes = useStyles();
@@ -42,32 +48,49 @@ export default function Body(props) {
     const id = currentId
     axios.post('/api/news/main', { id, idx, cnt, recIdx }, { cancelToken: cancelToken.token })
       .then((response) => {
-        console.log(response.data)
         const data = shuffle(response.data.slice(0, -1)).concat(response.data[cnt - 1])
         setNewsData(newsData.concat(data))
         if (response.data.length < cnt || newsData.length >= 288) {
           setIsAllLoad(true)
         }
-        if (recIdx.length <= cnt || !response.data[cnt - 1].rec) {
-          setRecIdx([])
-        } else {
-          setRecIdx(recIdx.slice(recIdx.indexOf(response.data[cnt - 1].idx) + 1))
+        if(recIdx.length > 0) {
+          if (recIdx.length <= cnt || !response.data[cnt - 1].rec) {
+            setRecIdx([])
+          } else {
+            setRecIdx(recIdx.slice(recIdx.indexOf(response.data[cnt - 1].idx) + 1))
+          }
         }
         setLoading(false)
       }).catch((error) => {
-
+        setIsAllLoad(true)
       })
   }, [newsData, currentId, cancelToken, recIdx])
 
   const getRecIdx = useCallback(() => {
     const id = currentId
-    axios.post('/api/news/recommend_idx', { id }, { cancelToken: cancelToken.token }).then(data => {
-      setRecIdx(data.data.recommend)
-      setLoading(false)
-    }).catch(err => {
-      setRecIdx([])
-      setLoading(false)
-    })
+    if (id !== "") {
+      axios.post('/api/news/recommend_idx', { id }, { cancelToken: cancelToken.token }).then(data => {
+        setRecIdx(data.data.recommend)
+      }).catch(err => {
+        setRecIdx([])
+      }).finally(() => {
+        setLoading(false)
+      })
+    } else {
+      const cookie = getHistoryCookie()
+      if(cookie) {
+        axios.post('/api/news/recommend_idx', { cookie }, { cancelToken: cancelToken.token }).then(data => {
+          setRecIdx(data.data.recommend)
+        }).catch(err => {
+          setRecIdx([])
+        }).finally(() => {
+          setLoading(false)
+        })
+      } else {
+        setRecIdx([])
+        setLoading(false)
+      }
+    }
   }, [currentId, cancelToken])
 
   const handleScroll = useCallback(() => {

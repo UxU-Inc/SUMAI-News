@@ -70,6 +70,25 @@ function news_agency_logo(news_agency) {
   return '/images/news_agency/' + news_agency + '.png';
 }
 
+function setHistoryCookie(value) {
+  const name = 'history';
+  let idx, arr = []
+  
+  const cookie = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  if(cookie) arr = atob(cookie[2]).split(',')
+  if(arr.length >= 100) {
+    arr.pop()
+  }
+  if((idx = arr.indexOf(String(value))) === -1) {
+    arr.unshift(value)
+  }
+  arr.sort((a, b) => {
+    return b - a;
+  })
+
+  document.cookie = name + '=' + btoa(arr.join(',')) + ';path=/;';
+}
+
 export default function RecipeReviewCard(props) {
   const classes = useStyles();
   const { news, currentId, deleteable } = props;
@@ -105,6 +124,8 @@ export default function RecipeReviewCard(props) {
       .then((response) => {
       }).catch((error) => {
       })
+    } else if(currentId !== "-1" && currentId === "") {
+      setHistoryCookie(idx)
     }
   }
   const requsetDelete = (bool) => {

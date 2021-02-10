@@ -22,6 +22,12 @@ function shuffle(a) {
   return a
 }
 
+function getHistoryCookie() {
+  const name = 'history';
+  const cookie = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  return cookie ? atob(cookie[2]).split(',') : null;
+};
+
 export default function Body(props) {
   const { colsCount } = props
   const classes = useStyles();
@@ -56,7 +62,7 @@ export default function Body(props) {
         }
         setLoading(false)
       }).catch((error) => {
-
+        setIsAllLoad(true)
       })
   }, [newsData, currentId, cancelToken, recIdx])
 
@@ -65,14 +71,25 @@ export default function Body(props) {
     if (id !== "") {
       axios.post('/api/news/recommend_idx', { id }, { cancelToken: cancelToken.token }).then(data => {
         setRecIdx(data.data.recommend)
-        setLoading(false)
       }).catch(err => {
         setRecIdx([])
+      }).finally(() => {
         setLoading(false)
       })
     } else {
-      setRecIdx([])
-      setLoading(false)
+      const cookie = getHistoryCookie()
+      if(cookie) {
+        axios.post('/api/news/recommend_idx', { cookie }, { cancelToken: cancelToken.token }).then(data => {
+          setRecIdx(data.data.recommend)
+        }).catch(err => {
+          setRecIdx([])
+        }).finally(() => {
+          setLoading(false)
+        })
+      } else {
+        setRecIdx([])
+        setLoading(false)
+      }
     }
   }, [currentId, cancelToken])
 

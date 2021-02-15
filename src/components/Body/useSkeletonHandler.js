@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 export default function useSkeletonHandler(newsData, colsCount, itemRef) {
     const [skelOffsetTop, setSkelOffsetTop] = useState(0)
     const [hideSkel, setHideSkel] = useState([])
+    const [height, setHeight] = useState(0)
     const fontSize = useSelector(store => store.contentSetting.fontSize)
   
     const handleSkeleton = useCallback(() => {
@@ -23,8 +24,19 @@ export default function useSkeletonHandler(newsData, colsCount, itemRef) {
       setSkelOffsetTop(min)
       setHideSkel(temp)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [colsCount, newsData, fontSize]);
+    }, [colsCount, newsData, fontSize, height]);
   
+    const handleSize = useCallback(() => {
+      if(height !== window.innerHeight) {
+        setHeight(window.innerHeight)
+      }
+    }, [height]);
+
+    useEffect(() => {
+      window.addEventListener("resize", handleSize)
+      return () => window.removeEventListener("resize", handleSize);
+    }, [handleSize]);
+    
     useEffect(() => {
       handleSkeleton()
     }, [handleSkeleton]);

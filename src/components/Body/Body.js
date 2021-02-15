@@ -68,29 +68,14 @@ export default function Body(props) {
 
   const getRecIdx = useCallback(() => {
     const id = currentId
-    if (id !== "") {
-      axios.post('/api/news/recommend_idx', { id }, { cancelToken: cancelToken.token }).then(data => {
+    const cookie = getHistoryCookie()
+      axios.post('/api/news/recommend_idx', id !== "" ? { id } : { cookie }, { cancelToken: cancelToken.token }).then(data => {
         setRecIdx(data.data.recommend)
       }).catch(err => {
         setRecIdx([])
       }).finally(() => {
         setLoading(false)
       })
-    } else {
-      const cookie = getHistoryCookie()
-      if(cookie) {
-        axios.post('/api/news/recommend_idx', { cookie }, { cancelToken: cancelToken.token }).then(data => {
-          setRecIdx(data.data.recommend)
-        }).catch(err => {
-          setRecIdx([])
-        }).finally(() => {
-          setLoading(false)
-        })
-      } else {
-        setRecIdx([])
-        setLoading(false)
-      }
-    }
   }, [currentId, cancelToken])
 
   const handleScroll = useCallback(() => {
@@ -120,15 +105,19 @@ export default function Body(props) {
   }, []);
 
   useEffect(() => {
-    if (currentId !== '-1' && !recIdx && !loading) {
-      setLoading(true)
-      getRecIdx()
+    if (currentId !== '-1' && !loading && !isAllLoad) {
+      if(!recIdx) {
+        setLoading(true)
+        getRecIdx()
+      } else if(newsData.length === 0) {
+        setLoading(true)
+        NewsMain(-1, 24)
+      } else if(newsData[newsData.length - 1] && skelOffsetTop < window.innerHeight) {
+        setLoading(true)
+        NewsMain(newsData[newsData.length - 1].idx, 24)
+      }
     }
-    if (!isAllLoad && !loading && currentId !== '-1' && newsData.length === 0 && recIdx) {
-      setLoading(true)
-      NewsMain(-1, 24)
-    }
-  }, [NewsMain, newsData, isAllLoad, loading, currentId, recIdx, getRecIdx]);
+  }, [NewsMain, newsData, isAllLoad, loading, currentId, recIdx, getRecIdx, skelOffsetTop]);
 
   return (
     <Box className={classes.root}>

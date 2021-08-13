@@ -10,22 +10,23 @@ import AccountIcon from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import imgLogo from '../../images/sumai_logo_blue.png';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountManagementMenu from './AccountManagementMenu';
-
-import Menu from './Menu'
 
 import Snackbar from '@material-ui/core/Snackbar';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import * as root from '../../rootValue';
 import ControllerMenu from './Controller/ControllerMenu';
+import Menu from './Menu'
+import AccountManagementMenu from './AccountManagementMenu';
+import MenuListComposition from './MenuListComposition';
+import imgLogo from '../../images/sumai_logo_blue.png';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -114,7 +115,7 @@ export default function Header(props) {
   const loginButton = (
     <Button onClick={() => window.location.assign("https://sumai.co.kr/login?url=" + window.location.href)} className={classes.loginButton} style={md ? { padding: "7.5px 15px" } : { padding: "5px", minWidth: '80px' }}>
       <AccountIcon style={{ marginRight: "5px", }} />
-        로그인
+      로그인
     </Button>
   )
   const loginLayout = (
@@ -165,7 +166,7 @@ export default function Header(props) {
 
           {w_420 ? <ControllerMenu /> : <span />}
 
-          {w_365 ? <Menu /> : <div style={{ marginLeft: '10px' }} />}
+          {w_365 ? <MenuListComposition /> : <div style={{ marginLeft: '10px' }} />}
 
           {isLoggedIn ? loginLayout : loginButton}
 

@@ -72,14 +72,14 @@ function news_agency_logo(news_agency) {
 
 function setHistoryCookie(value) {
   const name = 'history';
-  let idx, arr = []
+  let arr = []
   
   const cookie = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
   if(cookie) arr = atob(cookie[2]).split(',')
   if(arr.length >= 100) {
     arr.pop()
   }
-  if((idx = arr.indexOf(String(value))) === -1) {
+  if(arr.indexOf(String(value)) === -1) {
     arr.unshift(value)
   }
   arr.sort((a, b) => {
